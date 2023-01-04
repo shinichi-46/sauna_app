@@ -7,6 +7,7 @@ import 'package:sauna_app/view/pages/post/create_post_page.dart';
 import 'package:sauna_app/view/pages/post/update_post_page.dart';
 import 'package:sauna_app/view/pages/tabs/tab_container.dart';
 
+
 class AppComponent extends StatelessWidget {
   const AppComponent({Key? key}) : super(key: key);
 
