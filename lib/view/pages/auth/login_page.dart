@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sauna_app/const/sauna_page_const.dart';
+import 'package:social_login_buttons/social_login_buttons.dart';
 
 class LoginPage extends StatelessWidget {
 
@@ -11,24 +12,26 @@ class LoginPage extends StatelessWidget {
       child: Scaffold(
           body: Center(
             child: Column(
-              mainAxisSize: MainAxisSize.min,
               children: [
+                Container(
+                  height: 200,
+                ), //高さ100
                 const Text(
-                  'LoginPage',
-                  style: TextStyle(fontSize: 50),
+                  'ログインページ',
+                  style: TextStyle(fontSize: 40),
                 ),
-                const Text(
-                  'ごきげんよう！',
-                  style: TextStyle(fontSize: 20),
+                Container(
+                  height: 200,
                 ),
-                OutlinedButton(
+                SocialLoginButton(
+                  width:300 ,
+                  buttonType: SocialLoginButtonType.google,
                   onPressed: () {
                     Navigator.pushNamed(
                       context,
                       SaunaPage.FIRST_EDIT_ACCOUNT.screenName,
                     );
                   },
-                  child: const Text('初回アカウント設定画面に遷移する')
                 ),
               ],
             ),
