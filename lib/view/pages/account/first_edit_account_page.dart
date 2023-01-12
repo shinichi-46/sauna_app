@@ -3,7 +3,9 @@ import 'package:sauna_app/const/sauna_page_const.dart';
 
 class FirstEditAccountPage extends StatelessWidget {
 
-  const FirstEditAccountPage({Key? key}) : super(key: key);
+  FirstEditAccountPage({Key? key}) : super(key: key);
+
+  final _userNameController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -17,12 +19,20 @@ class FirstEditAccountPage extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  'FirstEditAccountPage',
+                  'ユーザー名',
                   style: TextStyle(fontSize: 50),
                 ),
-                Text(
-                  'ごきげんよう！',
-                  style: TextStyle(fontSize: 20),
+                Container(
+                  height: 50,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 50.0,right: 50.0),
+                  child: TextField(
+                    controller: _userNameController,
+                  ),
+                ),
+                Container(
+                  height: 50,
                 ),
                 OutlinedButton(
                     onPressed: () {
@@ -31,7 +41,7 @@ class FirstEditAccountPage extends StatelessWidget {
                         SaunaPage.TAB.screenName,
                       );
                     },
-                    child: const Text('TAB画面に遷移する')
+                    child: const Text('決定')
                 ),
               ],
             ),
