@@ -57,6 +57,7 @@ class _CalenderPageState extends State<CalenderPage> {
 
                   ),
                 ),
+                /*
                 const Text(
                   'CalenderPage',
                   style: TextStyle(fontSize: 50),
@@ -83,6 +84,20 @@ class _CalenderPageState extends State<CalenderPage> {
                     },
                     child: const Text('サウナ記録の更新画面に遷移する')
                 ),
+                 */
+              Container(
+                height: 330,
+                child: ListView.builder(
+                  reverse: true,
+                  itemCount: 12,
+                  itemBuilder: (BuildContext context, int index) {
+                    return Container(
+                      height: 80,
+                      color: colorList[index % colorList.length],
+                    );
+                  },
+                ),
+              ),
               ],
             ),
           )
@@ -91,5 +106,5 @@ class _CalenderPageState extends State<CalenderPage> {
   }
 }
 
-
+List<Color> colorList = [Colors.cyan, Colors.deepOrange, Colors.indigo];
 
