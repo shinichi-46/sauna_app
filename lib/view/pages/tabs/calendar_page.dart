@@ -97,12 +97,43 @@ class _CalenderPageState extends State<CalenderPage> {
               Container(
                 height: 330,
                 child: ListView.builder(
-                  reverse: true,
                   itemCount: 12,
                   itemBuilder: (BuildContext context, int index) {
-                    return Container(
-                      height: 80,
-                      color: colorList[index % colorList.length],
+                    return Column(
+                      children: [
+                        Visibility(
+                          visible: index != 0,
+                          child: const Divider(
+                            height: 1,
+                            thickness: 0.5,
+                            indent: 0,
+                            endIndent: 0,
+                            color: Colors.black,
+                          ),
+                        ),
+                        Container(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('yyyy年　M月　D日　12：00'),
+                              Row(
+                                children: [
+                                  Icon(
+                                    Icons.sentiment_very_satisfied,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(10.0),
+                                    child: Text('Good'),
+                                  )
+                                ],
+                              ),
+                              Text('施設名')
+                            ],
+                          ),
+                          height: 80,
+                          color: Colors.white
+                        ),
+                      ],
                     );
                   },
                 ),
