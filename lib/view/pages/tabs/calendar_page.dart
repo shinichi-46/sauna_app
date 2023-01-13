@@ -32,7 +32,10 @@ class _CalenderPageState extends State<CalenderPage> {
           endDrawer: const CustomDrawer(),
           floatingActionButton: FloatingActionButton(
             onPressed: () {
-              // Add your onPressed code here!
+              Navigator.pushNamed(
+                context,
+                SaunaPage.CREATE_POST.screenName,
+              );
             },
             child: const Icon(Icons.add),
           ),
