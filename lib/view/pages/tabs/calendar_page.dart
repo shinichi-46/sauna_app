@@ -30,6 +30,12 @@ class _CalenderPageState extends State<CalenderPage> {
             automaticallyImplyLeading: false,
           ),
           endDrawer: const CustomDrawer(),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              // Add your onPressed code here!
+            },
+            child: const Icon(Icons.add),
+          ),
           body: Center(
             child: Column(
               mainAxisSize: MainAxisSize.min,
