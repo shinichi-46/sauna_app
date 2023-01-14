@@ -115,7 +115,19 @@ class _CalenderPageState extends State<CalenderPage> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text('yyyy年　M月　D日　12：00'),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text('yyyy年　M月　D日　12：00'),
+                                  IconButton(
+                                      onPressed: () {},
+                                    constraints: const BoxConstraints(),
+                                      icon: Icon(
+                                        Icons.more_horiz,
+                                      ),
+                                  ),
+                                ],
+                              ),
                               Row(
                                 children: [
                                   Icon(
@@ -127,10 +139,10 @@ class _CalenderPageState extends State<CalenderPage> {
                                   )
                                 ],
                               ),
-                              Text('施設名')
+                              Text('施設名 サウナ北欧')
                             ],
                           ),
-                          height: 80,
+                          height: 100,
                           color: Colors.white
                         ),
                       ],
