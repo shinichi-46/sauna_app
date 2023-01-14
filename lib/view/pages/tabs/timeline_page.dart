@@ -67,10 +67,42 @@ class TimeLinePage extends StatelessWidget {
                               child: ListView.builder( scrollDirection: Axis.horizontal,
                                 itemCount: 20,
                                 itemBuilder: (context, index) {
-                                  return Container(
-                                      height: 200,width: 200,
-                                      child: Image.network('https://contents.oricon.co.jp/upimg/news/20190108/2126907_201901080813537001546926028c.jpg')
-                                );
+                                  return GestureDetector(
+                                    onTap: () {
+                                      showGeneralDialog(
+                                        transitionDuration: Duration(milliseconds: 1000),
+                                        barrierDismissible: true,
+                                        barrierLabel: '',
+                                        context: context,
+                                        pageBuilder: (context, animation1, animation2) {
+                                          return DefaultTextStyle(
+                                            style: Theme.of(context)
+                                                .primaryTextTheme
+                                                .bodyText1!,
+                                            child: Center(
+                                              child: Container(
+                                                height: 500,
+                                                width: 500,
+                                                child: SingleChildScrollView(
+                                                    child: InteractiveViewer(
+                                                      minScale: 0.1,
+                                                      maxScale: 5,
+                                                      child: Container(
+                                                        child: Image.network('https://contents.oricon.co.jp/upimg/news/20190108/2126907_201901080813537001546926028c.jpg'
+                                                        ),
+                                                      ),
+                                                    )),
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                      );
+                                    },
+                                    child: Container(
+                                        height: 200,width: 200,
+                                        child: Image.network('https://contents.oricon.co.jp/upimg/news/20190108/2126907_201901080813537001546926028c.jpg')
+                                ),
+                                  );
                               }
                               ),
                             ),
