@@ -8,6 +8,8 @@ class AgainEditAccountPage extends StatelessWidget {
 
   List<String> _testSaunaPlaceList = ['テルマー湯','サウナ北欧','ジートピア','かるまる','黄金湯','浅草橋NETU'];
 
+
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
