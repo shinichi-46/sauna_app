@@ -2,30 +2,88 @@ import 'package:flutter/material.dart';
 
 class AgainEditAccountPage extends StatelessWidget {
 
-  const AgainEditAccountPage({Key? key}) : super(key: key);
+  AgainEditAccountPage({Key? key}) : super(key: key);
+
+  final _userNameController = TextEditingController();
+
+  List<String> _testSaunaPlaceList = ['テルマー湯','サウナ北欧','ジートピア','かるまる','黄金湯','浅草橋NETU'];
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
           appBar: AppBar(
-            
           ),
-          body: Center(
+          body: Padding(
+            padding: const EdgeInsets.all(50.0),
             child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  'AgainEditAccountPage',
-                  style: TextStyle(fontSize: 50),
-                ),
-                Text(
-                  'ごきげんよう！',
-                  style: TextStyle(fontSize: 20),
-                ),
-              ],
-            ),
-          )
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                     GestureDetector(
+                       onTap: () {
+                         print('unnko');
+                       },
+                       child: Container(
+                         height: 100,
+                         width: 100,
+                         decoration: BoxDecoration(
+                           border: Border.all(color: Colors.black),
+                           shape: BoxShape.circle,
+                         ),
+                            child: Icon(
+                              Icons.add_a_photo,
+                              size: 50,
+                            ),
+                       ),
+                     ),
+                  Container(
+                    height: 70,
+                    child: Center(
+                      child: Text(
+                        'ユーザー名',
+                        style: TextStyle(fontSize: 30),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 100,
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 50.0,right: 50.0),
+                      child: TextField(
+                        controller: _userNameController,
+                      ),
+                    ),
+                  ),
+                  Container(
+                    height: 50,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        'お気に入り施設',
+                        style: TextStyle(fontSize: 20),
+                      ),
+                    ),
+                  ),
+                  for (int index = 1 ; index<_testSaunaPlaceList.length+1; index++) Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          child: Center(child: Text('${index.toString()}')),
+                          height: 30,
+                          width: 50,
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.black),
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                      ),
+                      Text('${_testSaunaPlaceList[index-1]}'),
+                    ],
+                  )
+                ],
+              ),
+          ),
       ),
     );
   }
