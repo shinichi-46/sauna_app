@@ -120,7 +120,12 @@ class _CalenderPageState extends State<CalenderPage> {
                                 children: [
                                   Text('yyyy年　M月　D日　12：00'),
                                   IconButton(
-                                      onPressed: () {},
+                                      onPressed: () {
+                                        Navigator.pushNamed(
+                                          context,
+                                          SaunaPage.UPDATE_POST.screenName,
+                                        );
+                                      },
                                     constraints: const BoxConstraints(),
                                       icon: Icon(
                                         Icons.more_horiz,
