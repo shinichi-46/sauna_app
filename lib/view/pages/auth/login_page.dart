@@ -1,10 +1,14 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:sauna_app/const/sauna_page_const.dart';
+import 'package:sauna_app/repository/authentication/firebase_auth_repository.dart';
 import 'package:social_login_buttons/social_login_buttons.dart';
 
 class LoginPage extends StatelessWidget {
 
-  const LoginPage({Key? key}) : super(key: key);
+  LoginPage({Key? key}) : super(key: key);
+
+  final AuthRepository authRepository = AuthRepository();
 
   @override
   Widget build(BuildContext context) {
@@ -26,11 +30,20 @@ class LoginPage extends StatelessWidget {
                 SocialLoginButton(
                   width:300 ,
                   buttonType: SocialLoginButtonType.google,
-                  onPressed: () {
-                    Navigator.pushNamed(
-                      context,
-                      SaunaPage.FIRST_EDIT_ACCOUNT.screenName,
-                    );
+                  onPressed: () async {
+                    try {
+                      final userCredential = await authRepository.signInWithGoogle();
+                      Navigator.pushNamed(
+                        context,
+                        SaunaPage.FIRST_EDIT_ACCOUNT.screenName,
+                      );
+                    } on FirebaseAuthException catch (e) {
+                      print('FirebaseAuthException');
+                      print('${e.code}');
+                    } on Exception catch (e) {
+                      print('Other Exception');
+                      print('${e.toString()}');
+                    }
                   },
                 ),
               ],
