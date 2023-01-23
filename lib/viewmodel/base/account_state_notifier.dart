@@ -17,13 +17,26 @@ class AccountStateNotifier extends StateNotifier<Account> {
     DocumentSnapshot<Object?> doc = await collection.doc(uid).get();
     if (doc.exists) {
       state = Account(id: doc.id, userName: doc.get('user_name'), favoritePlaceList: doc.get('favorite_place_list'), iconImagePath: doc.get('icon_image_path'));
-      print(state.id);
-      print(state.userName);
-      print(state.favoritePlaceList);
-      print(state.iconImagePath);
       return true;
     } else {
       return false;
     }
   }
+  Future<void>  post({String? uid,String? userName}) async {
+    try {
+      final CollectionReference collection = FirebaseFirestore.instance
+          .collection('user');
+      await collection.doc(uid).set({
+        'id': uid,
+        'user_name': userName,
+        'favorite_place_list': null,
+        'icon_image_path': null,
+      });
+      state = Account(id: uid!, userName: userName!, favoritePlaceList: null, iconImagePath: null);
+    } catch (err) {
+      print('error');
+    }
+  }
 }
+
+
