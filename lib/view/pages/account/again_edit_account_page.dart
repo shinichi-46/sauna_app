@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sauna_app/viewmodel/base/account_state_notifier.dart';
 
+// Todo: reiverpodを使うため、ConsumerWidgetまたはConsumerStatefulWidgetに変更する(riverpod)
 class AgainEditAccountPage extends ConsumerStatefulWidget {
   const AgainEditAccountPage({Key? key}) : super(key: key);
 
@@ -18,6 +19,7 @@ class _AgainEditAccountPageState extends ConsumerState<AgainEditAccountPage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    //Todo: Widgetで使用する(riverpod)
     _userNameController.text = ref.watch(accountNotifierProvider).userName;
   }
 

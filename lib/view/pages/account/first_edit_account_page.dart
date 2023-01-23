@@ -5,6 +5,7 @@ import 'package:sauna_app/const/sauna_page_const.dart';
 import 'package:sauna_app/view/arguments/login_argument.dart';
 import 'package:sauna_app/viewmodel/base/account_state_notifier.dart';
 
+// Todo: reiverpodを使うため、ConsumerWidgetまたはConsumerStatefulWidgetに変更する(riverpod)
 class FirstEditAccountPage extends ConsumerWidget {
 
   FirstEditAccountPage({Key? key}) : super(key: key);
@@ -12,6 +13,7 @@ class FirstEditAccountPage extends ConsumerWidget {
   final _userNameController = TextEditingController();
 
   @override
+  //Todo: "WidgetRef ref"を追加する(riverpod)
   Widget build(BuildContext context,WidgetRef ref) {
     LoginArguments arguments = ModalRoute.of(context)!.settings.arguments as LoginArguments;
     return SafeArea(
@@ -41,7 +43,7 @@ class FirstEditAccountPage extends ConsumerWidget {
                 ),
                 OutlinedButton(
                     onPressed: () async {
-                      // arguments.uid
+                      //Todo: Widgetで使用する(riverpod)
                       await ref.read(accountNotifierProvider.notifier).post(uid: arguments.uid, userName: _userNameController.text);
                       Navigator.pushNamed(
                         context,

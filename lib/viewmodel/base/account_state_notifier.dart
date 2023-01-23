@@ -2,11 +2,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sauna_app/viewmodel/model/accout_model.dart';
 
+//Todo: Providerの宣言(riverpod)
 final accountNotifierProvider =
 StateNotifierProvider<AccountStateNotifier, Account>(
       (ref) => AccountStateNotifier(),
 );
 
+
+//Todo: StateNotifierを継承したクラスを作成(riverpod)
 class AccountStateNotifier extends StateNotifier<Account> {
   // `super([])` で、空のTODOリストを初期値として入れている。
   AccountStateNotifier(): super(Account(id: '', userName: '', favoritePlaceList: [], iconImagePath: ''));

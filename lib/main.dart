@@ -10,6 +10,7 @@ import 'package:sauna_app/firebase_options/firebase_options_product.dart' as pro
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: getFirebaseOptions());
+  //Todo: アプリのルートにProviderScopeを追加する(riverpod)
   runApp(ProviderScope(child: const AppComponent()));
 }
 

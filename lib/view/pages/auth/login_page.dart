@@ -8,6 +8,8 @@ import 'package:sauna_app/view/arguments/login_argument.dart';
 import 'package:sauna_app/viewmodel/base/account_state_notifier.dart';
 import 'package:social_login_buttons/social_login_buttons.dart';
 
+
+// Todo: reiverpodを使うため、ConsumerWidgetまたはConsumerStatefulWidgetに変更する(riverpod)
 class LoginPage extends ConsumerWidget {
 
   LoginPage({Key? key}) : super(key: key);
@@ -15,6 +17,7 @@ class LoginPage extends ConsumerWidget {
   final AuthRepository authRepository = AuthRepository();
 
   @override
+  //Todo: "WidgetRef ref"を追加する(riverpod)
   Widget build(BuildContext context, WidgetRef ref) {
     return SafeArea(
       child: Scaffold(
@@ -38,6 +41,7 @@ class LoginPage extends ConsumerWidget {
                     try {
                       final userCredential = await authRepository.signInWithGoogle();
                       String _uid = userCredential.user!.uid;
+                      //Todo: Widgetで使用する(riverpod)
                       bool canFetched = await ref.read(accountNotifierProvider.notifier).canFetch(uid: _uid);
                       if (canFetched) {
                         Navigator.pushNamed(
