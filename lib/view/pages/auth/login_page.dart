@@ -1,19 +1,21 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sauna_app/const/sauna_page_const.dart';
 import 'package:sauna_app/repository/authentication/firebase_auth_repository.dart';
 import 'package:sauna_app/view/arguments/login_argument.dart';
+import 'package:sauna_app/viewmodel/base/account_state_notifier.dart';
 import 'package:social_login_buttons/social_login_buttons.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends ConsumerWidget {
 
   LoginPage({Key? key}) : super(key: key);
 
   final AuthRepository authRepository = AuthRepository();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return SafeArea(
       child: Scaffold(
           body: Center(
@@ -36,10 +38,8 @@ class LoginPage extends StatelessWidget {
                     try {
                       final userCredential = await authRepository.signInWithGoogle();
                       String _uid = userCredential.user!.uid;
-                      final CollectionReference collection = FirebaseFirestore.instance.collection('user');
-                      DocumentSnapshot<Object?> doc = await collection.doc(_uid).get();
-                      if (doc.exists) {
-                        final userData = doc.data();
+                      bool canFetched = await ref.read(accountNotifierProvider.notifier).canFetch(uid: _uid);
+                      if (canFetched) {
                         Navigator.pushNamed(
                           context,
                           SaunaPage.TAB.screenName,
@@ -51,7 +51,6 @@ class LoginPage extends StatelessWidget {
                           arguments: LoginArguments(uid: _uid),
                         );
                       }
-
                     } on FirebaseAuthException catch (e) {
                       print('FirebaseAuthException');
                       print('${e.code}');
