@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:sauna_app/const/sauna_page_const.dart';
 import 'package:sauna_app/repository/authentication/firebase_auth_repository.dart';
+import 'package:sauna_app/view/arguments/login_argument.dart';
 import 'package:social_login_buttons/social_login_buttons.dart';
 
 class LoginPage extends StatelessWidget {
@@ -34,15 +35,20 @@ class LoginPage extends StatelessWidget {
                   onPressed: () async {
                     try {
                       final userCredential = await authRepository.signInWithGoogle();
-                      String uid = userCredential.user!.uid;
+                      String _uid = userCredential.user!.uid;
                       final CollectionReference collection = FirebaseFirestore.instance.collection('user');
-                      DocumentSnapshot<Object?> doc = await collection.doc(uid).get();
+                      DocumentSnapshot<Object?> doc = await collection.doc(_uid).get();
                       if (doc.exists) {
                         final userData = doc.data();
+                        Navigator.pushNamed(
+                          context,
+                          SaunaPage.TAB.screenName,
+                        );
                       } else {
                         Navigator.pushNamed(
                           context,
                           SaunaPage.FIRST_EDIT_ACCOUNT.screenName,
+                          arguments: LoginArguments(uid: _uid),
                         );
                       }
 
