@@ -1,13 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sauna_app/viewmodel/base/account_state_notifier.dart';
 
-class AgainEditAccountPage extends StatelessWidget {
+class AgainEditAccountPage extends ConsumerStatefulWidget {
+  const AgainEditAccountPage({Key? key}) : super(key: key);
 
-  AgainEditAccountPage({Key? key}) : super(key: key);
+  @override
+  ConsumerState<AgainEditAccountPage> createState() => _AgainEditAccountPageState();
+}
+
+class _AgainEditAccountPageState extends ConsumerState<AgainEditAccountPage> {
 
   final _userNameController = TextEditingController();
 
   List<String> _testSaunaPlaceList = ['テルマー湯','サウナ北欧','ジートピア','かるまる','黄金湯','浅草橋NETU'];
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _userNameController.text = ref.watch(accountNotifierProvider).userName;
+  }
 
 
   @override
