@@ -40,6 +40,14 @@ class AccountStateNotifier extends StateNotifier<Account> {
       print('error');
     }
   }
+  Future<void>  update({String? newUserName}) async {
+    try {
+      FirebaseFirestore.instance.collection('user').doc(state.id).update({'user_name': newUserName});//repository③ の部分
+      state = Account(id: state.id, userName: newUserName!, favoritePlaceList: state.favoritePlaceList, iconImagePath: state.iconImagePath);//viewmodel②の部分
+    } catch (err) {
+      print('error');
+    }
+  }
 }
 
 

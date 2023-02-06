@@ -29,6 +29,12 @@ class _AgainEditAccountPageState extends ConsumerState<AgainEditAccountPage> {
     return SafeArea(
       child: Scaffold(
           appBar: AppBar(
+            leading: BackButton(
+              onPressed: () async {
+                await ref.read(accountNotifierProvider.notifier).update(newUserName: _userNameController.text);
+                Navigator.pop(context);//前のページに戻る
+              },
+            ),
           ),
           body: Padding(
             padding: const EdgeInsets.all(50.0),
