@@ -25,30 +25,39 @@ class CreatePostPage extends StatelessWidget {
               children: [
                 Container(
                   height: 80,
-                  child: Text(
-                    '記録',
-                    style: TextStyle(fontSize: 35,fontWeight: FontWeight.bold),
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 10,top: 10),
+                    child: Text(
+                      '記録',
+                      style: TextStyle(fontSize: 35,fontWeight: FontWeight.bold),
+                    ),
                   ),
                 ),
                 Divider(
                     height: 1,
                     thickness: 0.2,
-                    indent: 0,
-                    endIndent: 0,
+                    indent: 10,
+                    endIndent: 10,
                     color: Colors.black,
                   ),
                 Container(
                   height: 50,
                   child: Row(
                     children: [
-                      Text(
-                        '日時',
-                        style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 10,),
+                        child: Text(
+                          '日時',
+                          style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),
+                        ),
                       ),
                       Spacer(),
-                      Text(
-                        'yyyy年/M月/D日',
-                        style: TextStyle(fontSize: 15,)
+                      Padding(
+                        padding: const EdgeInsets.only(right: 10,),
+                        child: Text(
+                          'yyyy年/M月/D日',
+                          style: TextStyle(fontSize: 15,)
+                        ),
                       ),
                     ],
                   ),
@@ -56,13 +65,16 @@ class CreatePostPage extends StatelessWidget {
                 Divider(
                   height: 1,
                   thickness: 0.2,
-                  indent: 0,
-                  endIndent: 0,
+                  indent: 10,
+                  endIndent: 10,
                   color: Colors.black,
                 ),
-                Text(
-                    '評価',
-                  style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),
+                Padding(
+                  padding: const EdgeInsets.only(left: 10),
+                  child: Text(
+                      '評価',
+                    style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),
+                  ),
                 ),
 
                 Padding(
@@ -120,14 +132,17 @@ class CreatePostPage extends StatelessWidget {
                 Divider(
                   height: 1,
                   thickness: 0.2,
-                  indent: 0,
-                  endIndent: 0,
+                  indent: 10,
+                  endIndent: 10,
                   color: Colors.black,
                 ),
                 Row(
                   children: [
-                    Text(
-                      '施設名',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 10),
+                      child: Text(
+                        '施設名',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),
+                      ),
                     ),
                   ],
                 ),
@@ -167,15 +182,18 @@ class CreatePostPage extends StatelessWidget {
                 Divider(
                   height: 1,
                   thickness: 0.2,
-                  indent: 0,
-                  endIndent: 0,
+                  indent: 10,
+                  endIndent: 10,
                   color: Colors.black,
                 ),
-                Text(
-                  'メモ',
-                  style: TextStyle(
-                    fontSize: 20,fontWeight: FontWeight.bold,
-                  ),),
+                Padding(
+                  padding: const EdgeInsets.only(left: 10),
+                  child: Text(
+                    'メモ',
+                    style: TextStyle(
+                      fontSize: 20,fontWeight: FontWeight.bold,
+                    ),),
+                ),
                 Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: TextFormField(
@@ -187,15 +205,18 @@ class CreatePostPage extends StatelessWidget {
                 Divider(
                   height: 1,
                   thickness: 0.2,
-                  indent: 0,
-                  endIndent: 0,
+                  indent: 10,
+                  endIndent: 10,
                   color: Colors.black,
                 ),
-                Text(
-                  '写真',
-                  style: TextStyle(
-                    fontSize: 20,fontWeight: FontWeight.bold,
-                  ),),
+                Padding(
+                  padding: const EdgeInsets.only(left: 10),
+                  child: Text(
+                    '写真',
+                    style: TextStyle(
+                      fontSize: 20,fontWeight: FontWeight.bold,
+                    ),),
+                ),
                 Padding(
                   padding: const EdgeInsets.all(20.0),
                   child: Row(
@@ -220,8 +241,8 @@ class CreatePostPage extends StatelessWidget {
                 Divider(
                   height: 1,
                   thickness: 0.2,
-                  indent: 0,
-                  endIndent: 0,
+                  indent: 10,
+                  endIndent: 10,
                   color: Colors.black,
                 ),
                 Center(
