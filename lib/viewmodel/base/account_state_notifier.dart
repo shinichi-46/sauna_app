@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sauna_app/viewmodel/model/accout_model.dart';
 
@@ -40,10 +41,17 @@ class AccountStateNotifier extends StateNotifier<Account> {
       print('error');
     }
   }
-  Future<void>  update({String? newUserName}) async {
+  Future<void>  update({String? newUserName, String? imagePath}) async {
     try {
-      FirebaseFirestore.instance.collection('user').doc(state.id).update({'user_name': newUserName});//repository③ の部分
-      state = Account(id: state.id, userName: newUserName!, favoritePlaceList: state.favoritePlaceList, iconImagePath: state.iconImagePath);//viewmodel②の部分
+      if(newUserName != state.userName) {
+        state = Account(id: state.id, userName: newUserName!, favoritePlaceList: state.favoritePlaceList, iconImagePath: state.iconImagePath);//viewmodel②の部分
+      }
+      if(imagePath != '') {
+        state = Account(id: state.id, userName: state.userName, favoritePlaceList: state.favoritePlaceList, iconImagePath: imagePath);
+      }
+      if(newUserName != state.userName || imagePath != '') {
+        FirebaseFirestore.instance.collection('user').doc(state.id).update({'user_name': state.userName, 'icon_image_path': state.iconImagePath});//repository③ の部分
+      }
     } catch (err) {
       print('error');
     }

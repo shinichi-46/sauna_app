@@ -1,5 +1,10 @@
+import 'dart:io';
+
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:sauna_app/viewmodel/base/account_state_notifier.dart';
 
 // Todo: reiverpodを使うため、ConsumerWidgetまたはConsumerStatefulWidgetに変更する(riverpod)
@@ -23,6 +28,25 @@ class _AgainEditAccountPageState extends ConsumerState<AgainEditAccountPage> {
     _userNameController.text = ref.watch(accountNotifierProvider).userName;
   }
 
+  File? image;
+  String imagePath = '';
+  final ImagePicker _picker = ImagePicker();
+
+  Future<void> selectImage() async{
+    PickedFile? pickedImage = await _picker. getImage(source:ImageSource.gallery);
+    if(pickedImage == null) return;
+    setState((){
+      image = File(pickedImage.path);
+    });
+  }
+
+  Future<void> uploadImage() async{
+    String path = image!.path.substring(image!.path.lastIndexOf('/') + 1);
+    final ref = FirebaseStorage.instance.ref(path);
+    final storedImage = await ref.putData(image!.readAsBytesSync());
+    imagePath = await storedImage.ref.getDownloadURL();
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +55,10 @@ class _AgainEditAccountPageState extends ConsumerState<AgainEditAccountPage> {
           appBar: AppBar(
             leading: BackButton(
               onPressed: () async {
-                await ref.read(accountNotifierProvider.notifier).update(newUserName: _userNameController.text);
+                if (image != null) {
+                  await uploadImage();
+                }
+                await ref.read(accountNotifierProvider.notifier).update(newUserName: _userNameController.text,imagePath: imagePath);
                 Navigator.pop(context);//前のページに戻る
               },
             ),
@@ -42,22 +69,27 @@ class _AgainEditAccountPageState extends ConsumerState<AgainEditAccountPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                      GestureDetector(
-                       onTap: () {
-                         print('unnko');
+                       onTap: () async {
+                         await selectImage();
                        },
-                       child: Container(
-                         height: 100,
-                         width: 100,
-                         decoration: BoxDecoration(
-                           border: Border.all(color: Colors.black),
-                           shape: BoxShape.circle,
-                         ),
-                            child: Icon(
-                              Icons.add_a_photo,
-                              size: 50,
-                            ),
+                       child: image == null
+                           ? ref.watch(accountNotifierProvider).iconImagePath == '' ? Container(
+                              height: 100,
+                              width: 100,
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.black),
+                                shape: BoxShape.circle,
+                              ),
+                              child: Icon(
+                                Icons.add_a_photo,
+                                size: 50),
+                            ) : CircleAvatar(
+                             radius: 50,
+                             backgroundImage: NetworkImage(ref.watch(accountNotifierProvider).iconImagePath!))
+                          : CircleAvatar(
+                            radius: 50,
+                            backgroundImage: FileImage(image!))
                        ),
-                     ),
                   Container(
                     height: 70,
                     child: Center(
