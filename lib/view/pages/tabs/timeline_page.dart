@@ -27,7 +27,7 @@ class TimeLinePage extends StatelessWidget {
                       visible: index != 0,
                       child: const Divider(
                         height: 1,
-                        thickness: 0.5,
+                        thickness: 0.2,
                         indent: 0,
                         endIndent: 0,
                         color: Colors.black,

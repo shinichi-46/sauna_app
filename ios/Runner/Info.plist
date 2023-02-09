@@ -56,5 +56,7 @@
     		</array>
     	</dict>
     </array>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>写真フォルダへのアクセスを許可します</string>
 </dict>
 </plist>

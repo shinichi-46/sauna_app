@@ -1,16 +1,20 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sauna_app/const/sauna_page_const.dart';
 import 'package:sauna_app/view/arguments/login_argument.dart';
+import 'package:sauna_app/viewmodel/base/account_state_notifier.dart';
 
-class FirstEditAccountPage extends StatelessWidget {
+// Todo: reiverpodを使うため、ConsumerWidgetまたはConsumerStatefulWidgetに変更する(riverpod)
+class FirstEditAccountPage extends ConsumerWidget {
 
   FirstEditAccountPage({Key? key}) : super(key: key);
 
   final _userNameController = TextEditingController();
 
   @override
-  Widget build(BuildContext context) {
+  //Todo: "WidgetRef ref"を追加する(riverpod)
+  Widget build(BuildContext context,WidgetRef ref) {
     LoginArguments arguments = ModalRoute.of(context)!.settings.arguments as LoginArguments;
     return SafeArea(
       child: Scaffold(
@@ -39,18 +43,8 @@ class FirstEditAccountPage extends StatelessWidget {
                 ),
                 OutlinedButton(
                     onPressed: () async {
-                      // arguments.uid
-                      try {
-                        final CollectionReference collection = FirebaseFirestore.instance.collection('user');
-                        await collection.doc(arguments.uid).set({
-                          'id': arguments.uid,
-                          'user_name': _userNameController.text,
-                          'favorite_place_list':null,
-                          'icon_image_path':null,
-                        });
-                      } catch (err) {
-                        print('error');
-                      }
+                      //Todo: Widgetで使用する(riverpod)
+                      await ref.read(accountNotifierProvider.notifier).post(uid: arguments.uid, userName: _userNameController.text);
                       Navigator.pushNamed(
                         context,
                         SaunaPage.TAB.screenName,
