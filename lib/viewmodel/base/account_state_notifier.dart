@@ -20,7 +20,7 @@ class AccountStateNotifier extends StateNotifier<Account> {
     final CollectionReference collection = FirebaseFirestore.instance.collection('user');
     DocumentSnapshot<Object?> doc = await collection.doc(uid).get();
     if (doc.exists) {
-      state = Account(id: doc.id, userName: doc.get('user_name'), favoritePlaceList: doc.get('favorite_place_list'), iconImagePath: doc.get('icon_image_path'));
+      state = Account(id: doc.id, userName: doc.get('user_name'), favoritePlaceList: doc.get('favorite_place_list').cast<String>() ?? [], iconImagePath: doc.get('icon_image_path'));
       return true;
     } else {
       return false;

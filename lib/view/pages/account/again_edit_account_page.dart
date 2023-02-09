@@ -118,7 +118,7 @@ class _AgainEditAccountPageState extends ConsumerState<AgainEditAccountPage> {
                       ),
                     ),
                   ),
-                  for (int index = 1 ; index<_testSaunaPlaceList.length+1; index++) Row(
+                  for (int index = 1 ; index<ref.watch(accountNotifierProvider).favoritePlaceList!.length+1; index++) Row(
                     children: [
                       Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -132,7 +132,7 @@ class _AgainEditAccountPageState extends ConsumerState<AgainEditAccountPage> {
                           ),
                         ),
                       ),
-                      Text('${_testSaunaPlaceList[index-1]}'),
+                      Text('${ref.watch(accountNotifierProvider).favoritePlaceList![index-1]}'),
                     ],
                   )
                 ],
