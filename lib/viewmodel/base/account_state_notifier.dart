@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sauna_app/viewmodel/model/accout_model.dart';
 
@@ -20,7 +19,12 @@ class AccountStateNotifier extends StateNotifier<Account> {
     final CollectionReference collection = FirebaseFirestore.instance.collection('user');
     DocumentSnapshot<Object?> doc = await collection.doc(uid).get();
     if (doc.exists) {
-      state = Account(id: doc.id, userName: doc.get('user_name'), favoritePlaceList: doc.get('favorite_place_list').cast<String>() ?? [], iconImagePath: doc.get('icon_image_path'));
+      state = Account(
+          id: doc.id,
+          userName: doc.get('user_name'),
+          favoritePlaceList: doc.get('favorite_place_list').cast<String>() ?? [],
+          iconImagePath: doc.get('icon_image_path')
+      );
       return true;
     } else {
       return false;
@@ -36,7 +40,12 @@ class AccountStateNotifier extends StateNotifier<Account> {
         'favorite_place_list': null,
         'icon_image_path': null,
       });
-      state = Account(id: uid!, userName: userName!, favoritePlaceList: null, iconImagePath: null);
+      state = Account(
+          id: uid!,
+          userName: userName!,
+          favoritePlaceList: null,
+          iconImagePath: null
+      );
     } catch (err) {
       print('error');
     }
@@ -44,10 +53,19 @@ class AccountStateNotifier extends StateNotifier<Account> {
   Future<void>  update({String? newUserName, String? imagePath}) async {
     try {
       if(newUserName != state.userName) {
-        state = Account(id: state.id, userName: newUserName!, favoritePlaceList: state.favoritePlaceList, iconImagePath: state.iconImagePath);//viewmodel②の部分
+        state = Account(
+            id: state.id,
+            userName: newUserName!,
+            favoritePlaceList: state.favoritePlaceList,
+            iconImagePath: state.iconImagePath
+        );//viewmodel②の部分
       }
       if(imagePath != '') {
-        state = Account(id: state.id, userName: state.userName, favoritePlaceList: state.favoritePlaceList, iconImagePath: imagePath);
+        state = Account(id: state.id,
+            userName: state.userName,
+            favoritePlaceList: state.favoritePlaceList,
+            iconImagePath: imagePath
+        );
       }
       if(newUserName != state.userName || imagePath != '') {
         FirebaseFirestore.instance.collection('user').doc(state.id).update({'user_name': state.userName, 'icon_image_path': state.iconImagePath});//repository③ の部分
