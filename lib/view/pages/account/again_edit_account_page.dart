@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -17,6 +18,8 @@ class AgainEditAccountPage extends ConsumerStatefulWidget {
 class _AgainEditAccountPageState extends ConsumerState<AgainEditAccountPage> {
 
   final _userNameController = TextEditingController();
+
+  List<String> _testSaunaPlaceList = ['テルマー湯','サウナ北欧','ジートピア','かるまる','黄金湯','浅草橋NETU'];
 
   @override
   void didChangeDependencies() {
