@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sauna_app/const/sauna_page_const.dart';
+import 'package:sauna_app/view/pages/post/create_post_page.dart';
 import 'package:sauna_app/view/widgets/custom_drawer_widget.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -32,9 +33,12 @@ class _CalenderPageState extends State<CalenderPage> {
           endDrawer: const CustomDrawer(),
           floatingActionButton: FloatingActionButton(
             onPressed: () {
-              Navigator.pushNamed(
-                context,
-                SaunaPage.CREATE_POST.screenName,
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) {
+                    return CreatePostPage(selectedDate: _selected ?? DateTime.now());
+                  },
+                ),
               );
             },
             child: const Icon(Icons.add),

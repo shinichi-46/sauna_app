@@ -3,10 +3,8 @@ import 'package:sauna_app/const/sauna_page_const.dart';
 import 'package:sauna_app/view/pages/account/again_edit_account_page.dart';
 import 'package:sauna_app/view/pages/account/first_edit_account_page.dart';
 import 'package:sauna_app/view/pages/auth/login_page.dart';
-import 'package:sauna_app/view/pages/post/create_post_page.dart';
 import 'package:sauna_app/view/pages/post/update_post_page.dart';
 import 'package:sauna_app/view/pages/tabs/tab_container.dart';
-
 
 class AppComponent extends StatelessWidget {
   const AppComponent({Key? key}) : super(key: key);
@@ -21,7 +19,6 @@ class AppComponent extends StatelessWidget {
         SaunaPage.LOGIN.screenName: (_) => LoginPage(),
         SaunaPage.FIRST_EDIT_ACCOUNT.screenName: (_) => FirstEditAccountPage(),
         SaunaPage.AGAIN_EDIT_ACCOUNT.screenName: (_) => AgainEditAccountPage(),
-        SaunaPage.CREATE_POST.screenName: (_) => CreatePostPage(),
         SaunaPage.UPDATE_POST.screenName: (_) => UpdatePostPage(),
         SaunaPage.LICENSE.screenName: (_) => LicensePage(),
       }
