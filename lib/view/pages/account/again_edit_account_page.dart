@@ -47,97 +47,95 @@ class _AgainEditAccountPageState extends ConsumerState<AgainEditAccountPage> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-          appBar: AppBar(
-            leading: BackButton(
-              onPressed: () async {
-                if (image != null) {
-                  await uploadImage();
-                }
-                await ref.read(accountNotifierProvider.notifier).update(newUserName: _userNameController.text,imagePath: imagePath);
-                Navigator.pop(context);//前のページに戻る
-              },
-            ),
+    return Scaffold(
+        appBar: AppBar(
+          leading: BackButton(
+            onPressed: () async {
+              if (image != null) {
+                await uploadImage();
+              }
+              await ref.read(accountNotifierProvider.notifier).update(newUserName: _userNameController.text,imagePath: imagePath);
+              Navigator.pop(context);//前のページに戻る
+            },
           ),
-          body: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(50.0),
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                       GestureDetector(
-                         onTap: () async {
-                           await selectImage();
-                         },
-                         child: image == null
-                             ? ref.watch(accountNotifierProvider).iconImagePath == '' ? Container(
-                                height: 100,
-                                width: 100,
-                                decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.black),
-                                  shape: BoxShape.circle,
-                                ),
-                                child: Icon(
-                                  Icons.add_a_photo,
-                                  size: 50),
-                              ) : CircleAvatar(
-                               radius: 50,
-                               backgroundImage: NetworkImage(ref.watch(accountNotifierProvider).iconImagePath!))
-                            : CircleAvatar(
-                              radius: 50,
-                              backgroundImage: FileImage(image!))
-                         ),
-                    Container(
-                      height: 70,
-                      child: Center(
-                        child: Text(
-                          'ユーザー名',
-                          style: TextStyle(fontSize: 30),
-                        ),
+        ),
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(50.0),
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                     GestureDetector(
+                       onTap: () async {
+                         await selectImage();
+                       },
+                       child: image == null
+                           ? ref.watch(accountNotifierProvider).iconImagePath == '' ? Container(
+                              height: 100,
+                              width: 100,
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.black),
+                                shape: BoxShape.circle,
+                              ),
+                              child: Icon(
+                                Icons.add_a_photo,
+                                size: 50),
+                            ) : CircleAvatar(
+                             radius: 50,
+                             backgroundImage: NetworkImage(ref.watch(accountNotifierProvider).iconImagePath!))
+                          : CircleAvatar(
+                            radius: 50,
+                            backgroundImage: FileImage(image!))
+                       ),
+                  Container(
+                    height: 70,
+                    child: Center(
+                      child: Text(
+                        'ユーザー名',
+                        style: TextStyle(fontSize: 30),
                       ),
                     ),
-                    SizedBox(
-                      height: 100,
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 50.0,right: 50.0),
-                        child: TextField(
-                          controller: _userNameController,
-                        ),
+                  ),
+                  SizedBox(
+                    height: 100,
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 50.0,right: 50.0),
+                      child: TextField(
+                        controller: _userNameController,
                       ),
                     ),
-                    Container(
-                      height: 50,
-                      child: Padding(
+                  ),
+                  Container(
+                    height: 50,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        'お気に入り施設',
+                        style: TextStyle(fontSize: 20),
+                      ),
+                    ),
+                  ),
+                  for (int index = 1 ; index<ref.watch(accountNotifierProvider).favoritePlaceList!.length+1; index++) Row(
+                    children: [
+                      Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          'お気に入り施設',
-                          style: TextStyle(fontSize: 20),
-                        ),
-                      ),
-                    ),
-                    for (int index = 1 ; index<ref.watch(accountNotifierProvider).favoritePlaceList!.length+1; index++) Row(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Container(
-                            child: Center(child: Text('${index.toString()}')),
-                            height: 30,
-                            width: 50,
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.black),
-                              shape: BoxShape.circle,
-                            ),
+                        child: Container(
+                          child: Center(child: Text('${index.toString()}')),
+                          height: 30,
+                          width: 50,
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.black),
+                            shape: BoxShape.circle,
                           ),
                         ),
-                        Text('${ref.watch(accountNotifierProvider).favoritePlaceList![index-1]}'),
-                      ],
-                    )
-                  ],
-                ),
-            ),
+                      ),
+                      Text('${ref.watch(accountNotifierProvider).favoritePlaceList![index-1]}'),
+                    ],
+                  )
+                ],
+              ),
           ),
-      ),
+        ),
     );
   }
 }
