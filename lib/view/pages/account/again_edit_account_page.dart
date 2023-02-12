@@ -34,7 +34,7 @@ class _AgainEditAccountPageState extends ConsumerState<AgainEditAccountPage> {
     if(pickedImage == null) return;
     setState((){
       image = File(pickedImage.path);
-    });
+    });//写真を選んでいるだけの処理
   }
 
   Future<void> uploadImage() async{
@@ -42,7 +42,7 @@ class _AgainEditAccountPageState extends ConsumerState<AgainEditAccountPage> {
     final ref = FirebaseStorage.instance.ref(path);
     final storedImage = await ref.putData(image!.readAsBytesSync());
     imagePath = await storedImage.ref.getDownloadURL();
-    setState(() {});
+    setState(() {});//FireBaseストレージに登録
   }
 
   @override
