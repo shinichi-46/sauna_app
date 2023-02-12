@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:sauna_app/const/sauna_page_const.dart';
 import 'package:sauna_app/viewmodel/base/account_state_notifier.dart';
 
@@ -16,6 +19,9 @@ class _CreatePostPageState extends ConsumerState<CreatePostPage> {
   final _userNameController = TextEditingController();
   int? evaluationStatus;
   bool _flag = false;
+
+  final ImagePicker _picker = ImagePicker();
+  List<File> images = [];
 
   @override
   Widget build(BuildContext context) {
@@ -265,23 +271,87 @@ class _CreatePostPageState extends ConsumerState<CreatePostPage> {
                   ),
                   Padding(
                     padding: const EdgeInsets.all(20.0),
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.collections,
-                          size: 30,
-                          color: Colors.blue,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(5.0),
-                          child: Text(
-                            '写真を選択',
-                            style: TextStyle(
-                              fontSize: 15,
-                              color: Colors.blue,
-                            ),),
-                        ),
-                      ],
+                    child: GestureDetector(
+                      onTap: () async {
+                        List<XFile>? xFiles = await _picker.pickMultiImage();//写真が複数選択できるようになる
+                        if(xFiles.isNotEmpty) {
+                          images = [];//２回目以降写真を追加した時、前回に追加した写真が消えるようになっている。
+                          for (var xFile in xFiles) {images.add(File(xFile.path));}
+                          setState(() {});//ontap以下写真が選択されている時の処理。
+                        }
+                      },
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.collections,
+                            size: 30,
+                            color: Colors.blue,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(5.0),
+                            child: Text(
+                              '写真を選択',
+                              style: TextStyle(
+                                fontSize: 15,
+                                color: Colors.blue,
+                              ),),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Container(
+                    height: 200,
+                    child: ListView.builder( scrollDirection: Axis.horizontal,
+                        itemCount: images.length,
+                        itemBuilder: (context, index) {
+                          return Stack(
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  showGeneralDialog(
+                                    transitionDuration: Duration(milliseconds: 1000),
+                                    barrierDismissible: true,
+                                    barrierLabel: '',
+                                    context: context,
+                                    pageBuilder: (context, animation1, animation2) {
+                                      return DefaultTextStyle(
+                                        style: Theme.of(context)
+                                            .primaryTextTheme
+                                            .bodyText1!,
+                                        child: Center(
+                                          child: Container(
+                                            child: SingleChildScrollView(
+                                                child: InteractiveViewer(
+                                                  minScale: 0.1,
+                                                  maxScale: 5,
+                                                  child: Container(
+                                                    child: Image.file(images[index]),
+                                                    ),
+                                                  ),
+                                                )
+                                          ),
+                                          ),
+                                      );
+                                    },
+                                  );
+                                },
+                                child: Container(
+                                    height: 200,width: 200,
+                                    child: Image.file(images[index], fit: BoxFit.fill),
+                                ),
+                              ),
+                              IconButton(onPressed: (){
+                                images.removeAt(index);
+                                setState(() {});//imagesがstatefullwidgetで管理されているため状態を保存するためにsetaStateをつけなければならない
+                                }, icon: Icon(
+                                Icons.remove_circle,
+                                size: 35,
+                                color: Colors.red.withOpacity(0.7),
+                              ),),
+                            ],
+                          );
+                        }
                     ),
                   ),
                   Divider(
