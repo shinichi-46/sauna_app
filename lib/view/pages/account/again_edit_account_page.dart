@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -19,8 +18,6 @@ class _AgainEditAccountPageState extends ConsumerState<AgainEditAccountPage> {
 
   final _userNameController = TextEditingController();
 
-  List<String> _testSaunaPlaceList = ['テルマー湯','サウナ北欧','ジートピア','かるまる','黄金湯','浅草橋NETU'];
-
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -37,7 +34,7 @@ class _AgainEditAccountPageState extends ConsumerState<AgainEditAccountPage> {
     if(pickedImage == null) return;
     setState((){
       image = File(pickedImage.path);
-    });
+    });//写真を選んでいるだけの処理
   }
 
   Future<void> uploadImage() async{
@@ -45,25 +42,25 @@ class _AgainEditAccountPageState extends ConsumerState<AgainEditAccountPage> {
     final ref = FirebaseStorage.instance.ref(path);
     final storedImage = await ref.putData(image!.readAsBytesSync());
     imagePath = await storedImage.ref.getDownloadURL();
-    setState(() {});
+    setState(() {});//FireBaseストレージに登録
   }
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-          appBar: AppBar(
-            leading: BackButton(
-              onPressed: () async {
-                if (image != null) {
-                  await uploadImage();
-                }
-                await ref.read(accountNotifierProvider.notifier).update(newUserName: _userNameController.text,imagePath: imagePath);
-                Navigator.pop(context);//前のページに戻る
-              },
-            ),
+    return Scaffold(
+        appBar: AppBar(
+          leading: BackButton(
+            onPressed: () async {
+              if (image != null) {
+                await uploadImage();
+              }
+              await ref.read(accountNotifierProvider.notifier).update(newUserName: _userNameController.text,imagePath: imagePath);
+              Navigator.pop(context);//前のページに戻る
+            },
           ),
-          body: Padding(
+        ),
+        body: SingleChildScrollView(
+          child: Padding(
             padding: const EdgeInsets.all(50.0),
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -138,7 +135,7 @@ class _AgainEditAccountPageState extends ConsumerState<AgainEditAccountPage> {
                 ],
               ),
           ),
-      ),
+        ),
     );
   }
 }
