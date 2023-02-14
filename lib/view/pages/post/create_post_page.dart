@@ -31,7 +31,7 @@ class _CreatePostPageState extends ConsumerState<CreatePostPage> {
         focusNode: focusNode,
         child: GestureDetector(
         onTap: focusNode.requestFocus,
-      child: Scaffold(
+          child: Scaffold(
           appBar: AppBar(
           ),
           body: SingleChildScrollView(
