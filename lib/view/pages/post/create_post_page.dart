@@ -1,9 +1,11 @@
 import 'dart:io';
-
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sauna_app/viewmodel/base/account_state_notifier.dart';
+import 'package:sauna_app/viewmodel/base/post_state_notifier.dart';
+import 'package:sauna_app/viewmodel/model/post_model.dart';
 
 class CreatePostPage extends ConsumerStatefulWidget {
   const CreatePostPage({Key? key, required this.selectedDate}) : super(key: key);
@@ -21,8 +23,22 @@ class _CreatePostPageState extends ConsumerState<CreatePostPage> {
   bool canNotPressed = false;
   String memo = '';
 
+
   final ImagePicker _picker = ImagePicker();
   List<File> images = [];
+  List<String> imagePathList = [];
+
+
+  Future<void> uploadImage() async{
+    for (File image in images){
+      String path = image.path.substring(image.path.lastIndexOf('/') + 1);
+      final ref = FirebaseStorage.instance.ref(path);
+      final storedImage = await ref.putData(image.readAsBytesSync());
+      String imagePath = await storedImage.ref.getDownloadURL();
+      imagePathList.add(imagePath);
+      setState(() {});//FireBaseストレージに登録
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,15 +56,15 @@ class _CreatePostPageState extends ConsumerState<CreatePostPage> {
                 children: [
                   Container(
                     height: 80,
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 10,top: 10),
+                    child: const Padding(
+                      padding: EdgeInsets.only(left: 10,top: 10),
                       child: Text(
                         '記録',
-                        style: TextStyle(fontSize: 35,fontWeight: FontWeight.bold),
+                        style: const TextStyle(fontSize: 35,fontWeight: FontWeight.bold),
                       ),
                     ),
                   ),
-                  Divider(
+                  const Divider(
                       height: 1,
                       thickness: 0.2,
                       indent: 10,
@@ -59,45 +75,44 @@ class _CreatePostPageState extends ConsumerState<CreatePostPage> {
                     height: 50,
                     child: Row(
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.only(left: 10,),
+                        const Padding(
+                          padding: EdgeInsets.only(left: 10,),
                           child: Text(
                             '日時',
                             style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),
                           ),
                         ),
-                        Spacer(),
+                        const Spacer(),
                         Padding(
                           padding: const EdgeInsets.only(right: 10,),
                           child: Text(
                             '${widget.selectedDate.year}年${widget.selectedDate.month}月${widget.selectedDate.day}日',
-                            style: TextStyle(fontSize: 15,)
+                            style: const TextStyle(fontSize: 15,)
                           ),
                         ),
                       ],
                     ),
                   ),
-                  Divider(
+                  const Divider(
                     height: 1,
                     thickness: 0.2,
                     indent: 10,
                     endIndent: 10,
                     color: Colors.black,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 10),
+                  const Padding(
+                    padding: EdgeInsets.only(left: 10),
                     child: Text(
                         '評価',
-                      style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),
+                      style: const TextStyle(fontSize: 20,fontWeight: FontWeight.bold),
                     ),
                   ),
-
                   Padding(
-                    padding: EdgeInsets.only(top: 10, right: 30, bottom: 10, left: 30),
+                    padding: const EdgeInsets.only(top: 10, right: 30, bottom: 10, left: 30),
                     child: Row(
                       children: [
                         Padding(
-                          padding: EdgeInsets.only(top: 10, right:  70, bottom: 10, left: 0),
+                          padding: const EdgeInsets.only(top: 10, right:  70, bottom: 10, left: 0),
                           child: Column(
                             children: [
                               GestureDetector(
@@ -111,14 +126,14 @@ class _CreatePostPageState extends ConsumerState<CreatePostPage> {
                                   size: 70,
                                 ),
                               ),
-                              Text(
+                              const Text(
                                   '良い'
                               ),
                             ],
                           ),
                         ),
                         Padding(
-                          padding: EdgeInsets.only(top: 10, right: 70, bottom: 10, left: 0),
+                          padding: const EdgeInsets.only(top: 10, right: 70, bottom: 10, left: 0),
                           child: Column(
                             children: [
                               GestureDetector(
@@ -132,14 +147,14 @@ class _CreatePostPageState extends ConsumerState<CreatePostPage> {
                                   size: 70,
                                 ),
                               ),
-                              Text(
+                              const Text(
                                   '普通'
                               ),
                             ],
                           ),
                         ),
                         Padding(
-                          padding: EdgeInsets.only(top: 10, right: 0, bottom: 10, left: 0),
+                          padding: const EdgeInsets.only(top: 10, right: 0, bottom: 10, left: 0),
                           child: Column(
                             children: [
                               GestureDetector(
@@ -153,7 +168,7 @@ class _CreatePostPageState extends ConsumerState<CreatePostPage> {
                                   size: 70,
                                 ),
                               ),
-                              Text(
+                              const Text(
                                   '悪い'
                               ),
                             ],
@@ -162,7 +177,7 @@ class _CreatePostPageState extends ConsumerState<CreatePostPage> {
                       ],
                     ),
                   ),
-                  Divider(
+                  const Divider(
                     height: 1,
                     thickness: 0.2,
                     indent: 10,
@@ -170,9 +185,9 @@ class _CreatePostPageState extends ConsumerState<CreatePostPage> {
                     color: Colors.black,
                   ),
                   Row(
-                    children: [
+                    children: const [
                       Padding(
-                        padding: const EdgeInsets.only(left: 10),
+                        padding: EdgeInsets.only(left: 10),
                         child: Text(
                           '施設名',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),
                         ),
@@ -186,7 +201,7 @@ class _CreatePostPageState extends ConsumerState<CreatePostPage> {
                         child: SizedBox(
                           width: 330,
                           child: TextField(
-                            decoration: InputDecoration(
+                            decoration: const InputDecoration(
                               hintText: 'サウナの施設名を入力',
                             ),
                             controller: _placeNameController,
@@ -196,6 +211,7 @@ class _CreatePostPageState extends ConsumerState<CreatePostPage> {
                                 _flag = false;
                               } else {
                                 canNotPressed = false;
+                                _placeNameController.text = text;
                               }
                               setState(() {});
                             },
@@ -203,7 +219,7 @@ class _CreatePostPageState extends ConsumerState<CreatePostPage> {
                         ),
                       ),
                       GestureDetector(
-                        child: Text(
+                        child: const Text(
                             '選択',
                           style: TextStyle(
                               fontSize: 20,fontWeight: FontWeight.bold,
@@ -252,7 +268,7 @@ class _CreatePostPageState extends ConsumerState<CreatePostPage> {
                                       setState(() {});
                                     },// チェックボックスをタップした際のイベントハンドラ
                                   ),
-                                  Text('お気に入りに追加'),
+                                  const Text('お気に入りに追加'),
                                 ],
                               ),
                             Container(
@@ -272,22 +288,22 @@ class _CreatePostPageState extends ConsumerState<CreatePostPage> {
                                   setState(() {});
                                 },// チェックボックスをタップした際のイベントハンドラ
                               ),
-                              Text('お気に入りに追加'),
+                              const Text('お気に入りに追加'),
                             ],
                           )
                   ),
-                  Divider(
+                  const Divider(
                     height: 1,
                     thickness: 0.2,
                     indent: 10,
                     endIndent: 10,
                     color: Colors.black,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 10),
+                  const Padding(
+                    padding: EdgeInsets.only(left: 10),
                     child: Text(
                       'メモ',
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 20,fontWeight: FontWeight.bold,
                       ),),
                   ),
@@ -297,22 +313,22 @@ class _CreatePostPageState extends ConsumerState<CreatePostPage> {
                       autofocus: true,
                       maxLines: 5,
                       keyboardType: TextInputType.multiline,
-                      decoration: InputDecoration(border: OutlineInputBorder()),
+                      decoration: const InputDecoration(border: const OutlineInputBorder()),
                       onChanged: (text) {
                         memo = text;
                         setState(() {});
                       },
                     ),
                   ),
-                  Divider(
+                  const Divider(
                     height: 1,
                     thickness: 0.2,
                     indent: 10,
                     endIndent: 10,
                     color: Colors.black,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 10),
+                  const Padding(
+                    padding: EdgeInsets.only(left: 10),
                     child: Text(
                       '写真',
                       style: TextStyle(
@@ -331,20 +347,21 @@ class _CreatePostPageState extends ConsumerState<CreatePostPage> {
                         }
                       },
                       child: Row(
-                        children: [
+                        children: const [
                           Icon(
                             Icons.collections,
                             size: 30,
                             color: Colors.blue,
                           ),
                           Padding(
-                            padding: const EdgeInsets.all(5.0),
+                            padding: EdgeInsets.all(5.0),
                             child: Text(
                               '写真を選択',
                               style: TextStyle(
                                 fontSize: 15,
                                 color: Colors.blue,
-                              ),),
+                              ),
+                            ),
                           ),
                         ],
                       ),
@@ -362,7 +379,7 @@ class _CreatePostPageState extends ConsumerState<CreatePostPage> {
                                 GestureDetector(
                                   onTap: () {
                                     showGeneralDialog(
-                                      transitionDuration: Duration(milliseconds: 1000),
+                                      transitionDuration: const Duration(milliseconds: 1000),
                                       barrierDismissible: true,
                                       barrierLabel: '',
                                       context: context,
@@ -395,7 +412,7 @@ class _CreatePostPageState extends ConsumerState<CreatePostPage> {
                                 ),
                                 IconButton(onPressed: (){
                                   images.removeAt(index);
-                                  setState(() {});//imagesがstatefullwidgetで管理されているため状態を保存するためにsetaStateをつけなければならない
+                                  setState(() {});//imagesがstatefulwidgetで管理されているため状態を保存するためにsetStateをつけなければならない
                                   }, icon: Icon(
                                   Icons.remove_circle,
                                   size: 35,
@@ -407,7 +424,7 @@ class _CreatePostPageState extends ConsumerState<CreatePostPage> {
                       ),
                     ),
                   ),
-                  Divider(
+                  const Divider(
                     height: 1,
                     thickness: 0.2,
                     indent: 10,
@@ -416,17 +433,17 @@ class _CreatePostPageState extends ConsumerState<CreatePostPage> {
                   ),
                   Center(
                     child: OutlinedButton(
-                        onPressed: () {
+                        onPressed: () async {
                           if (evaluationStatus == null) {
                             // バリデーションチェック
                             showDialog<void>(
                                 context: context,
                                 builder: (_) {
                                   return AlertDialog(
-                                    title: Text('評価が未選択です。'),
+                                    title: const Text('評価が未選択です。'),
                                     actions: <Widget>[
                                       GestureDetector(
-                                        child: Text('戻る', style: TextStyle(fontSize: 18),),
+                                        child: const Text('戻る', style: const TextStyle(fontSize: 18),),
                                         onTap: () {
                                           Navigator.pop(context);
                                         },
@@ -441,10 +458,10 @@ class _CreatePostPageState extends ConsumerState<CreatePostPage> {
                                 context: context,
                                 builder: (_) {
                                   return AlertDialog(
-                                    title: Text('施設名が未入力です。'),
+                                    title: const Text('施設名が未入力です。'),
                                     actions: <Widget>[
                                       GestureDetector(
-                                        child: Text('戻る', style: TextStyle(fontSize: 18),),
+                                        child: const Text('戻る', style: const TextStyle(fontSize: 18),),
                                         onTap: () {
                                           Navigator.pop(context);
                                         },
@@ -455,10 +472,10 @@ class _CreatePostPageState extends ConsumerState<CreatePostPage> {
                             );
                           } else {
                             // Storageに写真を登録
-
+                            await uploadImage();
                             // FireStoreに登録する
-
-                            // 前の画面に戻る
+                            ref.read(postNotifierProvider.notifier).create(placeName: _placeNameController.text, memo: memo, evaluationStatus: evaluationStatus!, imagePathList: imagePathList, creatorId: ref.watch(accountNotifierProvider).id, visitedDate: widget.selectedDate, createdDate: DateTime.now(), updateDate: DateTime.now());
+                            // 前の画面に戻る//??は前のものがnullだったら後の値を入れるという意味
                             Navigator.pop(context);
                           }
                         },
