@@ -1,13 +1,16 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
-import 'package:sauna_app/const/sauna_page_const.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sauna_app/view/widgets/custom_drawer_widget.dart';
 
-class TimeLinePage extends StatelessWidget {
+class TimeLinePage extends ConsumerStatefulWidget {
+  const TimeLinePage({Key? key}) : super(key: key);
 
-  TimeLinePage({Key? key}) : super(key: key);
+  @override
+ConsumerState<TimeLinePage> createState() => _TimeLinePageState();
+}
 
+class _TimeLinePageState extends ConsumerState<TimeLinePage> {
+//Consumerをつけることでriverpodでも対応できるようになる
   @override
   Widget build(BuildContext context) {
     return Scaffold(

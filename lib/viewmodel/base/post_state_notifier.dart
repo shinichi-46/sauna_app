@@ -35,4 +35,33 @@ class PostStateNotifier extends StateNotifier<List<Post>> {
       print('error');
     }
   }
+
+  Future<void> fetch({String? creatorId}) async {
+    try {
+      late QuerySnapshot snapshot;
+      final CollectionReference collection = FirebaseFirestore.instance.collection('post');
+      if (creatorId == null) {
+        snapshot = await collection.get();
+      } else {
+        snapshot = await collection.where('creatorId', isEqualTo: creatorId).get();
+      }
+      List<Post> postList = [];
+      for (var doc in snapshot.docs) {
+        postList.add(Post(
+            id: doc.id,
+            placeName: doc.get('placeName'),
+            memo: doc.get('memo'),
+            evaluationStatus: doc.get('evaluationStatus'),
+            imagePathList: doc.get('imagePathList').cast<String>() ?? [],
+            creatorId: doc.get('creatorId'),
+            visitedDate: doc.get('visitedDate').toDate(),
+            createdDate: doc.get('createdDate').toDate(),
+            updateDate: doc.get('updateDate').toDate(),
+        ));
+      }
+      state = postList;
+    } catch (err) {
+      print('error');
+    }
+  }
 }
