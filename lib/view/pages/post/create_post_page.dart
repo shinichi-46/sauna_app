@@ -5,7 +5,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sauna_app/viewmodel/base/account_state_notifier.dart';
 import 'package:sauna_app/viewmodel/base/post_state_notifier.dart';
-import 'package:sauna_app/viewmodel/model/post_model.dart';
 
 class CreatePostPage extends ConsumerStatefulWidget {
   const CreatePostPage({Key? key, required this.selectedDate}) : super(key: key);
