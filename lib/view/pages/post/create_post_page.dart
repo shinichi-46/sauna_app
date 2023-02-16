@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
@@ -21,18 +22,26 @@ class _CreatePostPageState extends ConsumerState<CreatePostPage> {
   bool _flag = false;
   bool canNotPressed = false;
   String memo = '';
-  Post? post ;
 
 
   final ImagePicker _picker = ImagePicker();
   List<File> images = [];
+  List<String> imagePathList = [];
 
+
+  Future<void> uploadImage() async{
+    for (File image in images){
+      String path = image.path.substring(image.path.lastIndexOf('/') + 1);
+      final ref = FirebaseStorage.instance.ref(path);
+      final storedImage = await ref.putData(image.readAsBytesSync());
+      String imagePath = await storedImage.ref.getDownloadURL();
+      imagePathList.add(imagePath);
+      setState(() {});//FireBaseストレージに登録
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    final state = ref.watch(postNotifierProvider.notifier);
-
-
     final focusNode = FocusNode();
     return Focus(
         focusNode: focusNode,
@@ -109,7 +118,6 @@ class _CreatePostPageState extends ConsumerState<CreatePostPage> {
                               GestureDetector(
                                 onTap: () {
                                   evaluationStatus = 0;
-                                  post?.evaluationStatus = 0;
                                   setState(() {});
                                 },
                                 child: Icon(
@@ -131,7 +139,6 @@ class _CreatePostPageState extends ConsumerState<CreatePostPage> {
                               GestureDetector(
                                 onTap:() {
                                   evaluationStatus = 1;
-                                  post?.evaluationStatus = 1;
                                   setState(() {});
                                 },
                                 child: Icon(
@@ -153,7 +160,6 @@ class _CreatePostPageState extends ConsumerState<CreatePostPage> {
                               GestureDetector(
                                 onTap:() {
                                   evaluationStatus = 2;
-                                  post?.evaluationStatus = 2;
                                   setState(() {});
                                 },
                                 child: Icon(
@@ -205,7 +211,7 @@ class _CreatePostPageState extends ConsumerState<CreatePostPage> {
                                 _flag = false;
                               } else {
                                 canNotPressed = false;
-                                post?.placeName = text;
+                                _placeNameController.text = text;
                               }
                               setState(() {});
                             },
@@ -427,7 +433,7 @@ class _CreatePostPageState extends ConsumerState<CreatePostPage> {
                   ),
                   Center(
                     child: OutlinedButton(
-                        onPressed: () {
+                        onPressed: () async {
                           if (evaluationStatus == null) {
                             // バリデーションチェック
                             showDialog<void>(
@@ -466,9 +472,9 @@ class _CreatePostPageState extends ConsumerState<CreatePostPage> {
                             );
                           } else {
                             // Storageに写真を登録
-
+                            await uploadImage();
                             // FireStoreに登録する
-state.create(placeName: post?.placeName??'', evaluationStatus: evaluationStatus ??-1,imagePathList: post?.imagePathList, creatorId: post?.creatorId??'', visitedDate: widget.selectedDate, createdDate: post?.createdDate??DateTime.now(), updateDate: post?.updateDate??DateTime.now());
+                            ref.read(postNotifierProvider.notifier).create(placeName: _placeNameController.text, memo: memo, evaluationStatus: evaluationStatus!, imagePathList: imagePathList, creatorId: ref.watch(accountNotifierProvider).id, visitedDate: widget.selectedDate, createdDate: DateTime.now(), updateDate: DateTime.now());
                             // 前の画面に戻る//??は前のものがnullだったら後の値を入れるという意味
                             Navigator.pop(context);
                           }
