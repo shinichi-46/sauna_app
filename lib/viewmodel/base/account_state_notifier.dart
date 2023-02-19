@@ -22,7 +22,7 @@ class AccountStateNotifier extends StateNotifier<Account> {
       state = Account(
           id: doc.id,
           userName: doc.get('user_name'),
-          favoritePlaceList: doc.get('favorite_place_list').cast<String>() ?? [],
+          favoritePlaceList: doc.get('favorite_place_list').cast<String?>() ?? [],
           iconImagePath: doc.get('icon_image_path')
       );
       return true;
@@ -37,8 +37,8 @@ class AccountStateNotifier extends StateNotifier<Account> {
       await collection.doc(uid).set({
         'id': uid,
         'user_name': userName,
-        'favorite_place_list': null,
-        'icon_image_path': null,
+        'favorite_place_list': [],
+        'icon_image_path': '',
       });
       state = Account(
           id: uid!,

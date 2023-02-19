@@ -6,6 +6,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:sauna_app/viewmodel/base/account_state_notifier.dart';
 import 'package:sauna_app/viewmodel/base/post_state_notifier.dart';
 
+
 class CreatePostPage extends ConsumerStatefulWidget {
   const CreatePostPage({Key? key, required this.selectedDate}) : super(key: key);
   final DateTime selectedDate;
@@ -225,29 +226,33 @@ class _CreatePostPageState extends ConsumerState<CreatePostPage> {
                             color: Colors.blue,
                           ),),
                           onTapDown: (details) {
-                            final position = details.globalPosition;
-                            showMenu(
-                              context: context,
-                              position: RelativeRect.fromLTRB(position.dx, position.dy, 0, 0),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10.0),
-                              ),
-                              items: [
-                                for (int i = 0; i < ref.watch(accountNotifierProvider).favoritePlaceList!.length; i++)
-                                  PopupMenuItem(
-                                    value: i,
-                                    child: Text(
-                                      ref.watch(accountNotifierProvider).favoritePlaceList![i],
-                                    ),
-                                  )
-                              ],
-                              elevation: 8.0,
-                            ).then((value) async {
-                              _placeNameController.text = ref.watch(accountNotifierProvider).favoritePlaceList![value!];
-                              canNotPressed = true;
-                              _flag = false;
-                              setState(() {});
-                            });
+                            if (ref.watch(accountNotifierProvider).favoritePlaceList!.isEmpty) {
+                              // 何もしない
+                            } else {
+                              final position = details.globalPosition;
+                              showMenu(
+                                context: context,
+                                position: RelativeRect.fromLTRB(position.dx, position.dy, 0, 0),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                                items: [
+                                  for (int i = 0; i < ref.watch(accountNotifierProvider).favoritePlaceList!.length; i++)
+                                    PopupMenuItem(
+                                      value: i,
+                                      child: Text(
+                                        ref.watch(accountNotifierProvider).favoritePlaceList![i]!,
+                                      ),
+                                    )
+                                ],
+                                elevation: 8.0,
+                              ).then((value) async {
+                                _placeNameController.text = ref.watch(accountNotifierProvider).favoritePlaceList![value!]!;
+                                canNotPressed = true;
+                                _flag = false;
+                                setState(() {});
+                              });
+                            }
                           }
                       ),
                     ],
@@ -473,7 +478,7 @@ class _CreatePostPageState extends ConsumerState<CreatePostPage> {
                             // Storageに写真を登録
                             await uploadImage();
                             // FireStoreに登録する
-                            ref.read(postNotifierProvider.notifier).create(placeName: _placeNameController.text, memo: memo, evaluationStatus: evaluationStatus!, imagePathList: imagePathList, creatorId: ref.watch(accountNotifierProvider).id, visitedDate: widget.selectedDate, createdDate: DateTime.now(), updateDate: DateTime.now());
+                            ref.read(postNotifierProvider.notifier).create(placeName: _placeNameController.text, memo: memo, evaluationStatus: evaluationStatus!, imagePathList: imagePathList, creatorId: ref.watch(accountNotifierProvider).id, creatorName: ref.watch(accountNotifierProvider).userName, visitedDate: widget.selectedDate, createdDate: DateTime.now(), updateDate: DateTime.now());
                             // 前の画面に戻る//??は前のものがnullだったら後の値を入れるという意味
                             Navigator.pop(context);
                           }
