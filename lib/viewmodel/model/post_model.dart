@@ -6,7 +6,7 @@ class Post {
   List<String>? imagePathList;
   String creatorId;
   String creatorName;
-  DateTime visitedDate;
+  String visitedDate;
   DateTime createdDate;
   DateTime updateDate;
 

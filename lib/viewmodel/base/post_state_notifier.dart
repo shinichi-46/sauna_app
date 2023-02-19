@@ -27,7 +27,7 @@ class PostStateNotifier extends StateNotifier<List<Post>> {
         'imagePathList': imagePathList,
         'creatorId': creatorId,
         'creatorName': creatorName,
-        'visitedDate': visitedDate,
+        'visitedDate': '${visitedDate.year}/${visitedDate.month}/${visitedDate.day}',
         'createdDate': createdDate,
         'updateDate': updateDate,
       });
@@ -36,14 +36,14 @@ class PostStateNotifier extends StateNotifier<List<Post>> {
     }
   }
 
-  Future<void> fetch({String? creatorId}) async {
+  Future<void> fetch({String? creatorId, DateTime? visitedDate}) async {
     try {
       late QuerySnapshot snapshot;
       final CollectionReference collection = FirebaseFirestore.instance.collection('post');
-      if (creatorId == null) {
+      if (creatorId == null || visitedDate == null) {
         snapshot = await collection.orderBy('createdDate', descending: true).get();//タイムラインの投稿順を投稿日の新しい順にソートしている。
       } else {
-        snapshot = await collection.where('creatorId', isEqualTo: creatorId, ).orderBy('createdDate', descending: true).get();//カレンダーの投稿順を投稿日の新しい順にソートしている。
+        snapshot = await collection.where('creatorId', isEqualTo: creatorId).where('visitedDate', isEqualTo: '${visitedDate.year}/${visitedDate.month}/${visitedDate.day}').orderBy('createdDate', descending: true).get();//カレンダーの投稿順を投稿日の新しい順にソートしている。
       }
       List<Post> postList = [];
       for (var doc in snapshot.docs) {
@@ -55,14 +55,14 @@ class PostStateNotifier extends StateNotifier<List<Post>> {
             imagePathList: doc.get('imagePathList').cast<String>() ?? [],
             creatorId: doc.get('creatorId'),
             creatorName: doc.get('creatorName'),
-            visitedDate: doc.get('visitedDate').toDate(),
+            visitedDate: doc.get('visitedDate'),
             createdDate: doc.get('createdDate').toDate(),
             updateDate: doc.get('updateDate').toDate(),
         ));
       }
-
       state = postList;
     } catch (err) {
+      print(err);
       print('error');
     }
   }
