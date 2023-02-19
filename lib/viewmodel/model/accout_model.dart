@@ -1,7 +1,7 @@
 class Account {
   String id;
   String userName;
-  List<String>? favoritePlaceList;
+  List<String?>? favoritePlaceList;
   String? iconImagePath;
 
   Account({

@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sauna_app/viewmodel/model/accout_model.dart';
 import 'package:sauna_app/viewmodel/model/post_model.dart';
 
 //Todo: Providerの宣言(riverpod)
@@ -17,7 +16,7 @@ class PostStateNotifier extends StateNotifier<List<Post>> {
 
   Future<void> create(
       {required String placeName, String? memo, required int evaluationStatus, List<
-          String>? imagePathList, required String creatorId, required DateTime visitedDate, required DateTime createdDate, required DateTime updateDate}) async {
+          String>? imagePathList, required String creatorId, required String creatorName, required DateTime visitedDate, required DateTime createdDate, required DateTime updateDate}) async {
     try {
       final CollectionReference collection = FirebaseFirestore.instance
           .collection('post');
@@ -27,6 +26,7 @@ class PostStateNotifier extends StateNotifier<List<Post>> {
         'evaluationStatus': evaluationStatus,
         'imagePathList': imagePathList,
         'creatorId': creatorId,
+        'creatorName': creatorName,
         'visitedDate': visitedDate,
         'createdDate': createdDate,
         'updateDate': updateDate,
@@ -41,9 +41,9 @@ class PostStateNotifier extends StateNotifier<List<Post>> {
       late QuerySnapshot snapshot;
       final CollectionReference collection = FirebaseFirestore.instance.collection('post');
       if (creatorId == null) {
-        snapshot = await collection.get();
+        snapshot = await collection.orderBy('createdDate', descending: true).get();//タイムラインの投稿順を投稿日の新しい順にソートしている。
       } else {
-        snapshot = await collection.where('creatorId', isEqualTo: creatorId).get();
+        snapshot = await collection.where('creatorId', isEqualTo: creatorId, ).orderBy('createdDate', descending: true).get();//カレンダーの投稿順を投稿日の新しい順にソートしている。
       }
       List<Post> postList = [];
       for (var doc in snapshot.docs) {
@@ -54,11 +54,13 @@ class PostStateNotifier extends StateNotifier<List<Post>> {
             evaluationStatus: doc.get('evaluationStatus'),
             imagePathList: doc.get('imagePathList').cast<String>() ?? [],
             creatorId: doc.get('creatorId'),
+            creatorName: doc.get('creatorName'),
             visitedDate: doc.get('visitedDate').toDate(),
             createdDate: doc.get('createdDate').toDate(),
             updateDate: doc.get('updateDate').toDate(),
         ));
       }
+
       state = postList;
     } catch (err) {
       print('error');
