@@ -27,7 +27,7 @@ class _TimeLinePageState extends ConsumerState<TimeLinePage> {
           title: Text ('タイムライン'),
           automaticallyImplyLeading: false,
         ),
-        endDrawer: const CustomDrawer(),
+        endDrawer: CustomDrawer(),
         body: ref.watch(postNotifierProvider).isEmpty
         ? Text('loading')
         : ListView.builder(
@@ -54,17 +54,10 @@ class _TimeLinePageState extends ConsumerState<TimeLinePage> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text('${ref.watch(postNotifierProvider)[index].createdDate.year}/${ref.watch(postNotifierProvider)[index].createdDate.month}/${ref.watch(postNotifierProvider)[index].createdDate.day}　${ref.watch(postNotifierProvider)[index].createdDate.hour}：${ref.watch(postNotifierProvider)[index].createdDate.minute}',),
-                              IconButton(
-                                onPressed: () {},
-                                constraints: const BoxConstraints(),
-                                icon: Icon(
-                                  Icons.more_horiz,
-                                ),
-                              ),
                             ],
                           ),
                           Text(ref.watch(postNotifierProvider)[index].creatorName),
-                          evaluationWidget(ref.watch(postNotifierProvider)[index].evaluationStatus                                                    ),
+                          evaluationWidget(ref.watch(postNotifierProvider)[index].evaluationStatus),
                           Text(ref.watch(postNotifierProvider)[index].placeName),
                           Visibility(
                             visible: ref.watch(postNotifierProvider)[index].imagePathList!.isNotEmpty,

@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:sauna_app/const/sauna_page_const.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sauna_app/view/pages/post/create_post_page.dart';
 import 'package:sauna_app/view/widgets/custom_drawer_widget.dart';
+import 'package:sauna_app/viewmodel/base/account_state_notifier.dart';
+import 'package:sauna_app/viewmodel/base/post_state_notifier.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-class CalenderPage extends StatefulWidget {
+class CalenderPage extends ConsumerStatefulWidget {
   const CalenderPage({Key? key}) : super(key: key);
 
   @override
-  State<CalenderPage> createState() => _CalenderPageState();
+  ConsumerState<CalenderPage> createState() => _CalenderPageState();
 }
 
-class _CalenderPageState extends State<CalenderPage> {
+class _CalenderPageState extends ConsumerState<CalenderPage> {
 
   late DateTime _focused;
   DateTime? _selected;
@@ -22,6 +24,15 @@ class _CalenderPageState extends State<CalenderPage> {
     _focused = DateTime.now();
   }
 
+  @override
+  Future<void> didChangeDependencies() async {
+    super.didChangeDependencies();
+    await ref.read(postNotifierProvider.notifier).fetch(
+        creatorId: ref.watch(accountNotifierProvider).id,
+        visitedDate: _focused
+    );
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -29,15 +40,19 @@ class _CalenderPageState extends State<CalenderPage> {
         appBar: AppBar(
           automaticallyImplyLeading: false,
         ),
-        endDrawer: const CustomDrawer(),
+        endDrawer: CustomDrawer(),
         floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            Navigator.of(context).push(
+          onPressed: () async {
+            await Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (context) {
                   return CreatePostPage(selectedDate: _selected ?? DateTime.now());
                 },
               ),
+            );
+            await ref.read(postNotifierProvider.notifier).fetch(
+                creatorId: ref.watch(accountNotifierProvider).id,
+                visitedDate: _selected
             );
           },
           child: const Icon(Icons.add),
@@ -62,13 +77,17 @@ class _CalenderPageState extends State<CalenderPage> {
                   selectedDayPredicate: (day) {
                     return isSameDay(_selected, day);
                   },
-                  onDaySelected: (selected, focused) {
+                  onDaySelected: (selected, focused) async {
                     if (!isSameDay(_selected, selected)) {
                       setState(() {
                         _selected = selected;
                         _focused = focused;
                       });
                     }
+                    await ref.read(postNotifierProvider.notifier).fetch(
+                        creatorId: ref.watch(accountNotifierProvider).id,
+                        visitedDate: _selected
+                    );
                   },
                   focusedDay: _focused,
 
@@ -105,7 +124,7 @@ class _CalenderPageState extends State<CalenderPage> {
             Container(
               height: 330,
               child: ListView.builder(
-                itemCount: 12,
+                itemCount: ref.watch(postNotifierProvider).length,
                 itemBuilder: (BuildContext context, int index) {
                   return Column(
                     children: [
@@ -113,50 +132,81 @@ class _CalenderPageState extends State<CalenderPage> {
                         visible: index != 0,
                         child: const Divider(
                           height: 1,
-                          thickness: 0.5,
+                          thickness: 0.2,
                           indent: 0,
                           endIndent: 0,
                           color: Colors.black,
                         ),
                       ),
                       Container(
+                        color: Colors.white,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text('yyyy年　M月　D日　12：00'),
+                                Text('${ref.watch(postNotifierProvider)[index].createdDate.year}/${ref.watch(postNotifierProvider)[index].createdDate.month}/${ref.watch(postNotifierProvider)[index].createdDate.day}　${ref.watch(postNotifierProvider)[index].createdDate.hour}：${ref.watch(postNotifierProvider)[index].createdDate.minute}',),
                                 IconButton(
-                                    onPressed: () {
-                                      Navigator.pushNamed(
-                                        context,
-                                        SaunaPage.UPDATE_POST.screenName,
-                                      );
-                                    },
+                                  onPressed: () {},
                                   constraints: const BoxConstraints(),
-                                    icon: Icon(
-                                      Icons.more_horiz,
-                                    ),
+                                  icon: Icon(
+                                    Icons.delete,
+                                    color: Colors.red,
+                                  ),
                                 ),
                               ],
                             ),
-                            Row(
-                              children: [
-                                Icon(
-                                  Icons.sentiment_very_satisfied,
+                            Text(ref.watch(postNotifierProvider)[index].creatorName),
+                            evaluationWidget(ref.watch(postNotifierProvider)[index].evaluationStatus                                                    ),
+                            Text(ref.watch(postNotifierProvider)[index].placeName),
+                            Visibility(
+                              visible: ref.watch(postNotifierProvider)[index].imagePathList!.isNotEmpty,
+                              child: Container(
+                                height: 200,
+                                child: ListView.builder( scrollDirection: Axis.horizontal,
+                                    itemCount: ref.watch(postNotifierProvider)[index].imagePathList!.length,
+                                    itemBuilder: (context, i) {
+                                      return GestureDetector(
+                                        onTap: () {
+                                          showGeneralDialog(
+                                            transitionDuration: Duration(milliseconds: 1000),
+                                            barrierDismissible: true,
+                                            barrierLabel: '',
+                                            context: context,
+                                            pageBuilder: (context, animation1, animation2) {
+                                              return DefaultTextStyle(
+                                                style: Theme.of(context)
+                                                    .primaryTextTheme
+                                                    .bodyText1!,
+                                                child: Center(
+                                                  child: Container(
+                                                    child: SingleChildScrollView(
+                                                        child: InteractiveViewer(
+                                                          minScale: 0.1,
+                                                          maxScale: 5,
+                                                          child: Container(
+                                                            child: Image.network(ref.watch(postNotifierProvider)[index].imagePathList![i]
+                                                            ),
+                                                          ),
+                                                        )),
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                          );
+                                        },
+                                        child: Container(
+                                            height: 200,width: 200,
+                                            child: Image.network(ref.watch(postNotifierProvider)[index].imagePathList![i], fit: BoxFit.fill,)
+                                        ),
+                                      );
+                                    }
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.all(10.0),
-                                  child: Text('Good'),
-                                )
-                              ],
+                              ),
                             ),
-                            Text('施設名 サウナ北欧')
                           ],
                         ),
-                        height: 100,
-                        color: Colors.white
                       ),
                     ],
                   );
@@ -167,6 +217,58 @@ class _CalenderPageState extends State<CalenderPage> {
           ),
         )
     );
+  }
+  Widget evaluationWidget(int evaluationStatus) {//evaluationWidgetは自分で決めた名前で良い。データ型、関数名、引数の形で表す。
+    switch(evaluationStatus){
+      case 0:
+        return  Row(
+          children: [
+            Icon(
+              Icons.sentiment_very_satisfied,
+            ),
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Text('良い'),
+            )
+          ],
+        );
+      case 1:
+        return  Row(
+          children: [
+            Icon(
+              Icons.sentiment_neutral,
+            ),
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Text('普通'),
+            )
+          ],
+        );
+      case 2:
+        return  Row(
+          children: [
+            Icon(
+              Icons.sentiment_very_dissatisfied,
+            ),
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Text('悪い'),
+            )
+          ],
+        );
+      default:
+        return  Row(
+          children: [
+            Icon(
+              Icons.sentiment_neutral,
+            ),
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Text('普通'),
+            )
+          ],
+        );
+    }
   }
 }
 

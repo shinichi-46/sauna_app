@@ -26,4 +26,8 @@ class AuthRepository {
     // サインインしたら、UserCredentialを返す
     return FirebaseAuth.instance.signInWithCredential(credential);
   }
+  Future<void> signOut() async {
+    // ログアウト
+    FirebaseAuth.instance.signOut();
+  }
 }
