@@ -27,7 +27,7 @@ class _TimeLinePageState extends ConsumerState<TimeLinePage> {
           title: Text ('タイムライン'),
           automaticallyImplyLeading: false,
         ),
-        endDrawer: const CustomDrawer(),
+        endDrawer: CustomDrawer(),
         body: ref.watch(postNotifierProvider).isEmpty
         ? Text('loading')
         : ListView.builder(

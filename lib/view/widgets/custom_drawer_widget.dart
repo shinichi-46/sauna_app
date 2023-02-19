@@ -1,17 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sauna_app/const/sauna_page_const.dart';
+import 'package:sauna_app/repository/authentication/firebase_auth_repository.dart';
+import 'package:sauna_app/view/pages/auth/login_page.dart';
+import 'package:sauna_app/viewmodel/base/account_state_notifier.dart';
+import 'package:sauna_app/viewmodel/base/post_state_notifier.dart';
 
-class CustomDrawer extends StatelessWidget {
-  const CustomDrawer({Key? key}) : super(key: key);
+class CustomDrawer extends ConsumerWidget {
+  CustomDrawer({Key? key}) : super(key: key);
+
+  final AuthRepository authRepository = AuthRepository();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
 
     final List<String> menuItems = [
       'アカウント情報の設定',
       '利用規約',
       'プライバシーポリシー',
-      'ライセンス'
+      'ライセンス',
+      'ログアウト'
     ];
 
     final List<String> menuPages = [
@@ -19,6 +27,7 @@ class CustomDrawer extends StatelessWidget {
       'https://harumich.github.io/Privacy_Policy_TurtleTask/terms_of_service',
       'https://harumich.github.io/Privacy_Policy_TurtleTask/privacy_policy',
       SaunaPage.LICENSE.screenName
+
     ];
 
     return SizedBox(
@@ -41,13 +50,24 @@ class CustomDrawer extends StatelessWidget {
                 itemCount: menuItems.length,
                 itemBuilder: (BuildContext context, int index) {
                   return InkWell(
-                    onTap: () {
+                    onTap: () async {
                       if (index == 1 || index == 2) {
                         /*
                         launchUrl(
                           Uri.parse(menuPages[index]),
                         );
                          */
+                      }else if (index == 4) {
+                        await authRepository.signOut();
+                        ref.read(postNotifierProvider.notifier).logOut();
+                        ref.read(accountNotifierProvider.notifier).logOut();
+                        Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return LoginPage();
+                            },
+                          ),
+                        );
                       } else {
                         Navigator.pushNamed(
                           context,

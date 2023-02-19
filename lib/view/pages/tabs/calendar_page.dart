@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sauna_app/const/sauna_page_const.dart';
 import 'package:sauna_app/view/pages/post/create_post_page.dart';
 import 'package:sauna_app/view/widgets/custom_drawer_widget.dart';
 import 'package:sauna_app/viewmodel/base/account_state_notifier.dart';
@@ -25,6 +24,15 @@ class _CalenderPageState extends ConsumerState<CalenderPage> {
     _focused = DateTime.now();
   }
 
+  @override
+  Future<void> didChangeDependencies() async {
+    super.didChangeDependencies();
+    await ref.read(postNotifierProvider.notifier).fetch(
+        creatorId: ref.watch(accountNotifierProvider).id,
+        visitedDate: _focused
+    );
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +40,7 @@ class _CalenderPageState extends ConsumerState<CalenderPage> {
         appBar: AppBar(
           automaticallyImplyLeading: false,
         ),
-        endDrawer: const CustomDrawer(),
+        endDrawer: CustomDrawer(),
         floatingActionButton: FloatingActionButton(
           onPressed: () async {
             await Navigator.of(context).push(

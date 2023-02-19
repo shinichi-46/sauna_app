@@ -14,6 +14,10 @@ class PostStateNotifier extends StateNotifier<List<Post>> {
   // `super([])` で、空のTODOリストを初期値として入れている。
   PostStateNotifier() : super([]);
 
+  void logOut() {
+    state = [];
+  }
+
   Future<void> create(
       {required String placeName, String? memo, required int evaluationStatus, List<
           String>? imagePathList, required String creatorId, required String creatorName, required DateTime visitedDate, required DateTime createdDate, required DateTime updateDate}) async {

@@ -14,6 +14,10 @@ class AccountStateNotifier extends StateNotifier<Account> {
   // `super([])` で、空のTODOリストを初期値として入れている。
   AccountStateNotifier(): super(Account(id: '', userName: '', favoritePlaceList: [], iconImagePath: ''));
 
+  void logOut() {
+    state = Account(id: '', userName: '', favoritePlaceList: [], iconImagePath: '');
+  }
+
   /// 新しいTODOを追加するメソッド
   Future<bool>  canFetch({String? uid}) async {
     final CollectionReference collection = FirebaseFirestore.instance.collection('user');
