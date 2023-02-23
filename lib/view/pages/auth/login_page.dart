@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sauna_app/const/sauna_page_const.dart';
 import 'package:sauna_app/repository/authentication/firebase_auth_repository.dart';
@@ -40,6 +41,10 @@ class LoginPage extends ConsumerWidget {
                 onPressed: () async {
                   try {
                     final userCredential = await authRepository.signInWithGoogle();
+                    if (userCredential == null) {
+                      // Sign in flow canceled.
+                      return null;
+                    }
                     String _uid = userCredential.user!.uid;
                     //Todo: Widgetで使用する(riverpod)
                     bool canFetched = await ref.read(accountNotifierProvider.notifier).canFetch(uid: _uid);
