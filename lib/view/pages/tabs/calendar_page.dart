@@ -139,106 +139,120 @@ class _CalenderPageState extends ConsumerState<CalenderPage> {
                       ),
                       Container(
                         color: Colors.white,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(top: 8.0),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                ref.watch(accountNotifierProvider).iconImagePath == ''
-                                    ? Container(
-                                    height: 60,
-                                    width: 60,
-                                    decoration: BoxDecoration(
-                                      border: Border.all(color: Colors.black),
-                                      shape: BoxShape.circle,
-                                    ),
-                                      child: Icon(
-                                        Icons.add_a_photo,
-                                        size: 30))
-                                     : CircleAvatar(
-                                       radius: 30,
-                                        backgroundImage: NetworkImage(ref.watch(accountNotifierProvider).iconImagePath!)),
-                                  Text(ref.watch(postNotifierProvider)[index].creatorName),
-
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 140.0),
-                                    child: Text('${ref.watch(postNotifierProvider)[index].createdDate.year}/${ref.watch(postNotifierProvider)[index].createdDate.month}/${ref.watch(postNotifierProvider)[index].createdDate.day}　${ref.watch(postNotifierProvider)[index].createdDate.hour}：${ref.watch(postNotifierProvider)[index].createdDate.minute}',),
-                                  ),
-                                  IconButton(
-                                      onPressed: () {},
-                                      constraints: const BoxConstraints(),
-                                      icon: Icon(
-                                        Icons.delete,
-                                        color: Colors.red,
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 10.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(top: 8.0),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                  ref.watch(accountNotifierProvider).iconImagePath == ''
+                                      ? Container(
+                                      height: 60,
+                                      width: 60,
+                                      decoration: BoxDecoration(
+                                        border: Border.all(color: Colors.black),
+                                        shape: BoxShape.circle,
                                       ),
+                                        child: Icon(
+                                          Icons.add_a_photo,
+                                          size: 30))
+                                       : CircleAvatar(
+                                         radius: 30,
+                                          backgroundImage: NetworkImage(ref.watch(accountNotifierProvider).iconImagePath!)),
+                                    Padding(
+                                      padding: const EdgeInsets.only(left: 8.0),
+                                      child: Text(ref.watch(postNotifierProvider)[index].creatorName),
                                     ),
-                                ],
+                                    Spacer(),
+                                    IconButton(
+                                        onPressed: () {},
+                                        constraints: const BoxConstraints(),
+                                        icon: Icon(
+                                          Icons.delete,
+                                          color: Colors.red,
+                                        ),
+                                      ),
+                                  ],
+                                ),
                               ),
-                            ),
-                            evaluationWidget(ref.watch(postNotifierProvider)[index].evaluationStatus                                                    ),
-                            Text('施設名',
-                              style: TextStyle(color: Colors.grey),),
-                            Text(ref.watch(postNotifierProvider)[index].placeName,
-                              style:TextStyle(fontSize: 20) ,),
-                            Visibility(
-                              visible: ref.watch(postNotifierProvider)[index].memo!.isNotEmpty,//投稿画面のメモがnullの時、'メモ'を表示させない→自分で書いてみた、チェックお願いしてもらう
-                              child: Text('メモ',
-                                style: TextStyle(color: Colors.grey),),
-                            ),
-                            Text(ref.watch(postNotifierProvider)[index].memo!,
-                              style: TextStyle(fontSize: 20),),//自分で書いてみた、チェックお願いしてもらう
-                            Padding(
-                              padding: const EdgeInsets.only(bottom: 8.0),
-                              child: Visibility(
-                                visible: ref.watch(postNotifierProvider)[index].imagePathList!.isNotEmpty,
-                                child: Container(
-                                  height: 200,
-                                  child: ListView.builder( scrollDirection: Axis.horizontal,
-                                      itemCount: ref.watch(postNotifierProvider)[index].imagePathList!.length,
-                                      itemBuilder: (context, i) {
-                                        return GestureDetector(
-                                          onTap: () {
-                                            showGeneralDialog(
-                                              transitionDuration: Duration(milliseconds: 1000),
-                                              barrierDismissible: true,
-                                              barrierLabel: '',
-                                              context: context,
-                                              pageBuilder: (context, animation1, animation2) {
-                                                return DefaultTextStyle(
-                                                  style: Theme.of(context)
-                                                      .primaryTextTheme
-                                                      .bodyText1!,
-                                                  child: Center(
-                                                    child: Container(
-                                                      child: SingleChildScrollView(
-                                                          child: InteractiveViewer(
-                                                            minScale: 0.1,
-                                                            maxScale: 5,
-                                                            child: Container(
-                                                              child: Image.network(ref.watch(postNotifierProvider)[index].imagePathList![i]
+                              evaluationWidget(ref.watch(postNotifierProvider)[index].evaluationStatus                                                    ),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 10.0),
+                                child: Text('施設名',
+                                  style: TextStyle(color: Colors.grey),),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 10.0),
+                                child: Text(ref.watch(postNotifierProvider)[index].placeName,
+                                  style:TextStyle(fontSize: 20) ,),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 10.0),
+                                child: Visibility(
+                                  visible: ref.watch(postNotifierProvider)[index].memo!.isNotEmpty,//投稿画面のメモがnullの時、'メモ'を表示させない→自分で書いてみた、チェックお願いしてもらう
+                                  child: Text('メモ',
+                                    style: TextStyle(color: Colors.grey),),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 10.0),
+                                child: Text(ref.watch(postNotifierProvider)[index].memo!,
+                                  style: TextStyle(fontSize: 20),),
+                              ),//自分で書いてみた、チェックお願いしてもらう
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 8.0),
+                                child: Visibility(
+                                  visible: ref.watch(postNotifierProvider)[index].imagePathList!.isNotEmpty,
+                                  child: Container(
+                                    height: 200,
+                                    child: ListView.builder( scrollDirection: Axis.horizontal,
+                                        itemCount: ref.watch(postNotifierProvider)[index].imagePathList!.length,
+                                        itemBuilder: (context, i) {
+                                          return GestureDetector(
+                                            onTap: () {
+                                              showGeneralDialog(
+                                                transitionDuration: Duration(milliseconds: 1000),
+                                                barrierDismissible: true,
+                                                barrierLabel: '',
+                                                context: context,
+                                                pageBuilder: (context, animation1, animation2) {
+                                                  return DefaultTextStyle(
+                                                    style: Theme.of(context)
+                                                        .primaryTextTheme
+                                                        .bodyText1!,
+                                                    child: Center(
+                                                      child: Container(
+                                                        child: SingleChildScrollView(
+                                                            child: InteractiveViewer(
+                                                              minScale: 0.1,
+                                                              maxScale: 5,
+                                                              child: Container(
+                                                                child: Image.network(ref.watch(postNotifierProvider)[index].imagePathList![i]
+                                                                ),
                                                               ),
-                                                            ),
-                                                          )),
+                                                            )),
+                                                      ),
                                                     ),
-                                                  ),
-                                                );
-                                              },
-                                            );
-                                          },
-                                          child: Container(
-                                              height: 200,width: 200,
-                                              child: Image.network(ref.watch(postNotifierProvider)[index].imagePathList![i], fit: BoxFit.fill,)
-                                          ),
-                                        );
-                                      }
+                                                  );
+                                                },
+                                              );
+                                            },
+                                            child: Container(
+                                                height: 200,width: 200,
+                                                child: Image.network(ref.watch(postNotifierProvider)[index].imagePathList![i], fit: BoxFit.fill,)
+                                            ),
+                                          );
+                                        }
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                              ],
+                                ],
+                          ),
                         ),
                       ),
                     ],
