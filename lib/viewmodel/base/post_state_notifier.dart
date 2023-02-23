@@ -72,4 +72,20 @@ class PostStateNotifier extends StateNotifier<List<Post>> {
       print('error');
     }
   }
+  Future<void> delete(
+      {required int index}) async {
+    try {
+      final CollectionReference collection = FirebaseFirestore.instance
+          .collection('post');
+      await collection.doc(state[index].id).delete();
+      /*
+      List<Post> list = state;
+      list.removeAt(index);
+      state = list;
+       */
+    } catch (err) {
+      print(err);
+      print('error');
+    }
+  }
 }

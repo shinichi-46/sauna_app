@@ -4,6 +4,7 @@ import 'package:sauna_app/view/pages/post/create_post_page.dart';
 import 'package:sauna_app/view/widgets/custom_drawer_widget.dart';
 import 'package:sauna_app/viewmodel/base/account_state_notifier.dart';
 import 'package:sauna_app/viewmodel/base/post_state_notifier.dart';
+import 'package:sauna_app/viewmodel/model/post_model.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class CalenderPage extends ConsumerStatefulWidget {
@@ -35,6 +36,7 @@ class _CalenderPageState extends ConsumerState<CalenderPage> {
 
   @override
   Widget build(BuildContext context) {
+    List<Post> list = ref.watch(postNotifierProvider);
     return Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: false,
@@ -56,7 +58,7 @@ class _CalenderPageState extends ConsumerState<CalenderPage> {
           },
           child: const Icon(Icons.add),
         ),
-        body: Center(
+        body: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -123,7 +125,7 @@ class _CalenderPageState extends ConsumerState<CalenderPage> {
             Container(
               height: 330,
               child: ListView.builder(
-                itemCount: ref.watch(postNotifierProvider).length,
+                itemCount: list.length,
                 itemBuilder: (BuildContext context, int index) {
                   return Column(
                     children: [
@@ -165,11 +167,17 @@ class _CalenderPageState extends ConsumerState<CalenderPage> {
                                           backgroundImage: NetworkImage(ref.watch(accountNotifierProvider).iconImagePath!)),
                                     Padding(
                                       padding: const EdgeInsets.only(left: 8.0),
-                                      child: Text(ref.watch(postNotifierProvider)[index].creatorName),
+                                      child: Text(list[index].creatorName),
                                     ),
                                     Spacer(),
                                     IconButton(
-                                        onPressed: () {},
+                                        onPressed: () async {
+                                          await ref.read(postNotifierProvider.notifier).delete(index: index);
+                                          await ref.read(postNotifierProvider.notifier).fetch(
+                                              creatorId: ref.watch(accountNotifierProvider).id,
+                                              visitedDate: _selected ?? _focused
+                                          );
+                                        },
                                         constraints: const BoxConstraints(),
                                         icon: Icon(
                                           Icons.delete,
@@ -179,7 +187,7 @@ class _CalenderPageState extends ConsumerState<CalenderPage> {
                                   ],
                                 ),
                               ),
-                              evaluationWidget(ref.watch(postNotifierProvider)[index].evaluationStatus                                                    ),
+                              evaluationWidget(list[index].evaluationStatus                                                    ),
                               Padding(
                                 padding: const EdgeInsets.only(left: 10.0),
                                 child: Text('施設名',
@@ -187,30 +195,30 @@ class _CalenderPageState extends ConsumerState<CalenderPage> {
                               ),
                               Padding(
                                 padding: const EdgeInsets.only(left: 10.0),
-                                child: Text(ref.watch(postNotifierProvider)[index].placeName,
+                                child: Text(list[index].placeName,
                                   style:TextStyle(fontSize: 20) ,),
                               ),
                               Padding(
                                 padding: const EdgeInsets.only(left: 10.0),
                                 child: Visibility(
-                                  visible: ref.watch(postNotifierProvider)[index].memo!.isNotEmpty,//投稿画面のメモがnullの時、'メモ'を表示させない→自分で書いてみた、チェックお願いしてもらう
+                                  visible: list[index].memo!.isNotEmpty,//投稿画面のメモがnullの時、'メモ'を表示させない→自分で書いてみた、チェックお願いしてもらう
                                   child: Text('メモ',
                                     style: TextStyle(color: Colors.grey),),
                                 ),
                               ),
                               Padding(
                                 padding: const EdgeInsets.only(left: 10.0),
-                                child: Text(ref.watch(postNotifierProvider)[index].memo!,
+                                child: Text(list[index].memo!,
                                   style: TextStyle(fontSize: 20),),
                               ),//自分で書いてみた、チェックお願いしてもらう
                               Padding(
                                 padding: const EdgeInsets.only(bottom: 8.0),
                                 child: Visibility(
-                                  visible: ref.watch(postNotifierProvider)[index].imagePathList!.isNotEmpty,
+                                  visible: list[index].imagePathList!.isNotEmpty,
                                   child: Container(
                                     height: 200,
                                     child: ListView.builder( scrollDirection: Axis.horizontal,
-                                        itemCount: ref.watch(postNotifierProvider)[index].imagePathList!.length,
+                                        itemCount: list[index].imagePathList!.length,
                                         itemBuilder: (context, i) {
                                           return GestureDetector(
                                             onTap: () {
@@ -231,7 +239,7 @@ class _CalenderPageState extends ConsumerState<CalenderPage> {
                                                               minScale: 0.1,
                                                               maxScale: 5,
                                                               child: Container(
-                                                                child: Image.network(ref.watch(postNotifierProvider)[index].imagePathList![i]
+                                                                child: Image.network(list[index].imagePathList![i]
                                                                 ),
                                                               ),
                                                             )),
