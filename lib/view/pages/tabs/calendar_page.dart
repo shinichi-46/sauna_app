@@ -44,6 +44,7 @@ class _CalenderPageState extends ConsumerState<CalenderPage> {
         ),
         endDrawer: CustomDrawer(),
         floatingActionButton: FloatingActionButton(
+            backgroundColor: Colors.red[900],
           onPressed: () async {
             await Navigator.of(context).push(
               MaterialPageRoute(

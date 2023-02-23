@@ -5,6 +5,7 @@ import 'package:sauna_app/repository/authentication/firebase_auth_repository.dar
 import 'package:sauna_app/view/pages/auth/login_page.dart';
 import 'package:sauna_app/viewmodel/base/account_state_notifier.dart';
 import 'package:sauna_app/viewmodel/base/post_state_notifier.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class CustomDrawer extends ConsumerWidget {
   CustomDrawer({Key? key}) : super(key: key);
@@ -24,8 +25,8 @@ class CustomDrawer extends ConsumerWidget {
 
     final List<String> menuPages = [
       SaunaPage.AGAIN_EDIT_ACCOUNT.screenName,
-      'https://harumich.github.io/Privacy_Policy_TurtleTask/terms_of_service',
-      'https://harumich.github.io/Privacy_Policy_TurtleTask/privacy_policy',
+      'https://shinichi-46.github.io/Privacy_Policy_SaunaRecord/terms_of_service',
+      'https://shinichi-46.github.io/Privacy_Policy_SaunaRecord/privacy_policy',
       SaunaPage.LICENSE.screenName
 
     ];
@@ -52,11 +53,9 @@ class CustomDrawer extends ConsumerWidget {
                   return InkWell(
                     onTap: () async {
                       if (index == 1 || index == 2) {
-                        /*
                         launchUrl(
                           Uri.parse(menuPages[index]),
                         );
-                         */
                       }else if (index == 4) {
                         await authRepository.signOut();
                         ref.read(postNotifierProvider.notifier).logOut();
