@@ -50,57 +50,90 @@ class _TimeLinePageState extends ConsumerState<TimeLinePage> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text('${ref.watch(postNotifierProvider)[index].createdDate.year}/${ref.watch(postNotifierProvider)[index].createdDate.month}/${ref.watch(postNotifierProvider)[index].createdDate.day}　${ref.watch(postNotifierProvider)[index].createdDate.hour}：${ref.watch(postNotifierProvider)[index].createdDate.minute}',),
-                            ],
-                          ),
-                          Text(ref.watch(postNotifierProvider)[index].creatorName),
-                          evaluationWidget(ref.watch(postNotifierProvider)[index].evaluationStatus),
-                          Text(ref.watch(postNotifierProvider)[index].placeName),
-                          Visibility(
-                            visible: ref.watch(postNotifierProvider)[index].imagePathList!.isNotEmpty,
-                            child: Container(
-                              height: 200,
-                              child: ListView.builder( scrollDirection: Axis.horizontal,
-                                itemCount: ref.watch(postNotifierProvider)[index].imagePathList!.length,
-                                itemBuilder: (context, i) {
-                                  return GestureDetector(
-                                    onTap: () {
-                                      showGeneralDialog(
-                                        transitionDuration: Duration(milliseconds: 1000),
-                                        barrierDismissible: true,
-                                        barrierLabel: '',
-                                        context: context,
-                                        pageBuilder: (context, animation1, animation2) {
-                                          return DefaultTextStyle(
-                                            style: Theme.of(context)
-                                                .primaryTextTheme
-                                                .bodyText1!,
-                                            child: Center(
-                                              child: Container(
-                                                child: SingleChildScrollView(
-                                                    child: InteractiveViewer(
-                                                      minScale: 0.1,
-                                                      maxScale: 5,
-                                                      child: Container(
-                                                        child: Image.network(ref.watch(postNotifierProvider)[index].imagePathList![i]
-                                                        ),
-                                                      ),
-                                                    )),
-                                              ),
-                                            ),
-                                          );
-                                        },
-                                      );
-                                    },
-                                    child: Container(
-                                        height: 200,width: 200,
-                                        child: Image.network(ref.watch(postNotifierProvider)[index].imagePathList![i], fit: BoxFit.fill,)
+                          Padding(
+                            padding: const EdgeInsets.only(top: 8.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                ref.watch(postNotifierProvider)[index].creatorIconImagePath == ''
+                                    ? Container(
+                                    height: 60,
+                                    width: 60,
+                                    decoration: BoxDecoration(
+                                      border: Border.all(color: Colors.black),
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: Icon(
+                                        Icons.add_a_photo,
+                                        size: 30))
+                                    : CircleAvatar(
+                                    radius: 30,
+                                    backgroundImage: NetworkImage(ref.watch(postNotifierProvider)[index].creatorIconImagePath!)),
+                                Text(ref.watch(postNotifierProvider)[index].creatorName),
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 140.0,right: 20),
+                                  child: Text('${ref.watch(postNotifierProvider)[index].createdDate.year}/${ref.watch(postNotifierProvider)[index].createdDate.month}/${ref.watch(postNotifierProvider)[index].createdDate.day}　${ref.watch(postNotifierProvider)[index].createdDate.hour}：${ref.watch(postNotifierProvider)[index].createdDate.minute}',),
                                 ),
-                                  );
-                              }
+                              ],
+                            ),
+                          ),
+                          evaluationWidget(ref.watch(postNotifierProvider)[index].evaluationStatus),
+                          Text('施設名',
+                            style: TextStyle(color: Colors.grey),),
+                          Text(ref.watch(postNotifierProvider)[index].placeName,
+                            style:TextStyle(fontSize: 20) ,),
+                          Visibility(
+                            visible: ref.watch(postNotifierProvider)[index].memo!.isNotEmpty,//投稿画面のメモがnullの時、'メモ'を表示させない→自分で書いてみた、チェックお願いしてもらう
+                            child: Text('メモ',
+                              style: TextStyle(color: Colors.grey),),
+                          ),
+                          Text(ref.watch(postNotifierProvider)[index].memo!,
+                            style: TextStyle(fontSize: 20),),//自分で書いてみた、チェックお願いしてもらう
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 8.0),
+                            child: Visibility(
+                              visible: ref.watch(postNotifierProvider)[index].imagePathList!.isNotEmpty,
+                              child: Container(
+                                height: 200,
+                                child: ListView.builder( scrollDirection: Axis.horizontal,
+                                  itemCount: ref.watch(postNotifierProvider)[index].imagePathList!.length,
+                                  itemBuilder: (context, i) {
+                                    return GestureDetector(
+                                      onTap: () {
+                                        showGeneralDialog(
+                                          transitionDuration: Duration(milliseconds: 1000),
+                                          barrierDismissible: true,
+                                          barrierLabel: '',
+                                          context: context,
+                                          pageBuilder: (context, animation1, animation2) {
+                                            return DefaultTextStyle(
+                                              style: Theme.of(context)
+                                                  .primaryTextTheme
+                                                  .bodyText1!,
+                                              child: Center(
+                                                child: Container(
+                                                  child: SingleChildScrollView(
+                                                      child: InteractiveViewer(
+                                                        minScale: 0.1,
+                                                        maxScale: 5,
+                                                        child: Container(
+                                                          child: Image.network(ref.watch(postNotifierProvider)[index].imagePathList![i]
+                                                          ),
+                                                        ),
+                                                      )),
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                        );
+                                      },
+                                      child: Container(
+                                          height: 200,width: 200,
+                                          child: Image.network(ref.watch(postNotifierProvider)[index].imagePathList![i], fit: BoxFit.fill,)
+                                  ),
+                                    );
+                                }
+                                ),
                               ),
                             ),
                           ),
@@ -119,11 +152,15 @@ class _TimeLinePageState extends ConsumerState<TimeLinePage> {
       case 0:
         return  Row(
           children: [
-            Icon(
-              Icons.sentiment_very_satisfied,
+            Padding(
+              padding: const EdgeInsets.all(5.0),
+              child: Icon(
+                Icons.sentiment_very_satisfied,
+                size: 50,color: Colors.blue,
+              ),
             ),
             Padding(
-              padding: const EdgeInsets.all(10.0),
+              padding: const EdgeInsets.all(1.0),
               child: Text('良い'),
             )
           ],
@@ -131,11 +168,15 @@ class _TimeLinePageState extends ConsumerState<TimeLinePage> {
       case 1:
         return  Row(
           children: [
-            Icon(
-              Icons.sentiment_neutral,
+            Padding(
+              padding: const EdgeInsets.all(5.0),
+              child: Icon(
+                Icons.sentiment_neutral,
+                size: 50,color: Colors.yellow,
+              ),
             ),
             Padding(
-              padding: const EdgeInsets.all(10.0),
+              padding: const EdgeInsets.all(1.0),
               child: Text('普通'),
             )
           ],
@@ -143,11 +184,15 @@ class _TimeLinePageState extends ConsumerState<TimeLinePage> {
       case 2:
         return  Row(
           children: [
-            Icon(
-              Icons.sentiment_very_dissatisfied,
+            Padding(
+              padding: const EdgeInsets.all(5.0),
+              child: Icon(
+                Icons.sentiment_very_dissatisfied,
+                size: 50,color: Colors.red,
+              ),
             ),
             Padding(
-              padding: const EdgeInsets.all(10.0),
+              padding: const EdgeInsets.all(1.0),
               child: Text('悪い'),
             )
           ],

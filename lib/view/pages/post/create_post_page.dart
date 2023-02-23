@@ -478,7 +478,7 @@ class _CreatePostPageState extends ConsumerState<CreatePostPage> {
                             // Storageに写真を登録
                             await uploadImage();
                             // FireStoreに登録する
-                            ref.read(postNotifierProvider.notifier).create(placeName: _placeNameController.text, memo: memo, evaluationStatus: evaluationStatus!, imagePathList: imagePathList, creatorId: ref.watch(accountNotifierProvider).id, creatorName: ref.watch(accountNotifierProvider).userName, visitedDate: widget.selectedDate, createdDate: DateTime.now(), updateDate: DateTime.now());
+                            ref.read(postNotifierProvider.notifier).create(placeName: _placeNameController.text, memo: memo, evaluationStatus: evaluationStatus!, imagePathList: imagePathList, creatorId: ref.watch(accountNotifierProvider).id, creatorName: ref.watch(accountNotifierProvider).userName, creatorIconImagePath: ref.watch(accountNotifierProvider).iconImagePath!, visitedDate: widget.selectedDate, createdDate: DateTime.now(), updateDate: DateTime.now());
                             // 前の画面に戻る//??は前のものがnullだったら後の値を入れるという意味
                             Navigator.pop(context);
                           }

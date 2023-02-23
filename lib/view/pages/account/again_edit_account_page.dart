@@ -70,7 +70,7 @@ class _AgainEditAccountPageState extends ConsumerState<AgainEditAccountPage> {
                          await selectImage();
                        },
                        child: image == null
-                           ? ref.watch(accountNotifierProvider).iconImagePath == '' ? Container(
+                           ? ref.watch(accountNotifierProvider).iconImagePath == '' || ref.watch(accountNotifierProvider).iconImagePath == null ? Container(
                               height: 100,
                               width: 100,
                               decoration: BoxDecoration(

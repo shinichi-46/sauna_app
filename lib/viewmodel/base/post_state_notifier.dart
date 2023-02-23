@@ -20,7 +20,7 @@ class PostStateNotifier extends StateNotifier<List<Post>> {
 
   Future<void> create(
       {required String placeName, String? memo, required int evaluationStatus, List<
-          String>? imagePathList, required String creatorId, required String creatorName, required DateTime visitedDate, required DateTime createdDate, required DateTime updateDate}) async {
+          String>? imagePathList, required String creatorId, required String creatorName, required String creatorIconImagePath, required DateTime visitedDate, required DateTime createdDate, required DateTime updateDate}) async {
     try {
       final CollectionReference collection = FirebaseFirestore.instance
           .collection('post');
@@ -31,6 +31,7 @@ class PostStateNotifier extends StateNotifier<List<Post>> {
         'imagePathList': imagePathList,
         'creatorId': creatorId,
         'creatorName': creatorName,
+        'creatorIconImagePath': creatorIconImagePath,
         'visitedDate': '${visitedDate.year}/${visitedDate.month}/${visitedDate.day}',
         'createdDate': createdDate,
         'updateDate': updateDate,
@@ -59,6 +60,7 @@ class PostStateNotifier extends StateNotifier<List<Post>> {
             imagePathList: doc.get('imagePathList').cast<String>() ?? [],
             creatorId: doc.get('creatorId'),
             creatorName: doc.get('creatorName'),
+            creatorIconImagePath: doc.get('creatorIconImagePath') ?? '',
             visitedDate: doc.get('visitedDate'),
             createdDate: doc.get('createdDate').toDate(),
             updateDate: doc.get('updateDate').toDate(),
