@@ -54,27 +54,38 @@ class AccountStateNotifier extends StateNotifier<Account> {
       print('error');
     }
   }
-  Future<void>  update({String? newUserName, String? imagePath}) async {
+  Future<void>  update({String? newUserName, String? imagePath, String? newFavoritePlace}) async {
     try {
-      if(newUserName != state.userName) {
+      if(newUserName != null && newUserName != state.userName) {
+        print('1');
         state = Account(
             id: state.id,
-            userName: newUserName!,
+            userName: newUserName,
             favoritePlaceList: state.favoritePlaceList,
             iconImagePath: state.iconImagePath
-        );//viewmodel②の部分
+        ); //viewmodel②の部分
       }
-      if(imagePath != '') {
+      if(imagePath != null && imagePath != '') {
         state = Account(id: state.id,
             userName: state.userName,
             favoritePlaceList: state.favoritePlaceList,
             iconImagePath: imagePath
         );
       }
-      if(newUserName != state.userName || imagePath != '') {
-        FirebaseFirestore.instance.collection('user').doc(state.id).update({'user_name': state.userName, 'icon_image_path': state.iconImagePath});//repository③ の部分
+      if(newFavoritePlace != null) {
+        List<String?> list = state.favoritePlaceList!;
+        list.add(newFavoritePlace);
+        state = Account(id: state.id,
+            userName: state.userName,
+            favoritePlaceList: list,
+            iconImagePath: state.iconImagePath,
+        );
+      }
+      if(newUserName != '' || imagePath != '' || newFavoritePlace != null) {
+        FirebaseFirestore.instance.collection('user').doc(state.id).update({'user_name': state.userName, 'icon_image_path': state.iconImagePath, 'favorite_place_list': state.favoritePlaceList});//repository③ の部分
       }
     } catch (err) {
+      print(err);
       print('error');
     }
   }
