@@ -29,7 +29,7 @@ class _TimeLinePageState extends ConsumerState<TimeLinePage> {
         ),
         endDrawer: CustomDrawer(),
         body: ref.watch(postNotifierProvider).isEmpty
-        ? Text('loading')
+        ? Center(child: Text('投稿が見つかりません', style: TextStyle(fontWeight: FontWeight.bold)))
         : ListView.builder(
             itemCount: ref.watch(postNotifierProvider).length,
             itemBuilder: (BuildContext context, int index) {

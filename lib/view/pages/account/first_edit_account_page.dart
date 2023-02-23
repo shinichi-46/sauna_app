@@ -18,7 +18,6 @@ class FirstEditAccountPage extends ConsumerWidget {
     LoginArguments arguments = ModalRoute.of(context)!.settings.arguments as LoginArguments;
     return Scaffold(
         appBar: AppBar(
-
         ),
         body: Center(
           child: Column(
