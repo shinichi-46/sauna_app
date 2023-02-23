@@ -36,7 +36,7 @@ class _TabContainer extends State<TabContainer> {
               ),
             ],
             // backgroundColor: SaunaColor.primary,
-            // selectedItemColor: SaunaColor.tabSelectedText,
+            selectedItemColor: Colors.red[900],
             // unselectedItemColor: SaunaColor.tabText,
           ),
     );

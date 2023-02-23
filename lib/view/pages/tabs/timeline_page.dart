@@ -24,6 +24,7 @@ class _TimeLinePageState extends ConsumerState<TimeLinePage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          backgroundColor: Colors.red[900],
           title: Text ('タイムライン'),
           automaticallyImplyLeading: false,
         ),

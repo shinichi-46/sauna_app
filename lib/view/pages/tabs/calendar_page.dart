@@ -39,6 +39,7 @@ class _CalenderPageState extends ConsumerState<CalenderPage> {
     List<Post> list = ref.watch(postNotifierProvider);
     return Scaffold(
         appBar: AppBar(
+          backgroundColor: Colors.red[900],
           automaticallyImplyLeading: false,
         ),
         endDrawer: CustomDrawer(),

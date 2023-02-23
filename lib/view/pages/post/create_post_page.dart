@@ -49,6 +49,7 @@ class _CreatePostPageState extends ConsumerState<CreatePostPage> {
         onTap: focusNode.requestFocus,
           child: Scaffold(
           appBar: AppBar(
+            backgroundColor: Colors.red[900],
           ),
           body: SingleChildScrollView(
             child: Column(
@@ -219,11 +220,10 @@ class _CreatePostPageState extends ConsumerState<CreatePostPage> {
                         ),
                       ),
                       GestureDetector(
-                        child: const Text(
+                        child: Text(
                             '選択',
                           style: TextStyle(
-                              fontSize: 20,fontWeight: FontWeight.bold,
-                            color: Colors.blue,
+                              fontSize: 20,fontWeight: FontWeight.bold, color: Colors.red[900],
                           ),),
                           onTapDown: (details) {
                             if (ref.watch(accountNotifierProvider).favoritePlaceList!.isEmpty) {
@@ -265,7 +265,7 @@ class _CreatePostPageState extends ConsumerState<CreatePostPage> {
                                 children: [
                                   Checkbox(
                                     checkColor: Colors.white,
-                                    activeColor: Colors.blue,
+                                    activeColor: Colors.red[900],
                                     value: _flag,
                                     onChanged: (bool? e) {
                                       _flag = e!;
@@ -285,7 +285,7 @@ class _CreatePostPageState extends ConsumerState<CreatePostPage> {
                             children: [
                               Checkbox(
                                 checkColor: Colors.white,
-                                activeColor: Colors.blue,
+                                activeColor: Colors.red[900],
                                 value: _flag,
                                 onChanged: (bool? e) {
                                   _flag = e!;
@@ -351,11 +351,11 @@ class _CreatePostPageState extends ConsumerState<CreatePostPage> {
                         }
                       },
                       child: Row(
-                        children: const [
+                        children: [
                           Icon(
                             Icons.collections,
                             size: 30,
-                            color: Colors.blue,
+                            color: Colors.red[900],
                           ),
                           Padding(
                             padding: EdgeInsets.all(5.0),
@@ -363,7 +363,7 @@ class _CreatePostPageState extends ConsumerState<CreatePostPage> {
                               '写真を選択',
                               style: TextStyle(
                                 fontSize: 15,
-                                color: Colors.blue,
+                                color: Colors.red[900],
                               ),
                             ),
                           ),

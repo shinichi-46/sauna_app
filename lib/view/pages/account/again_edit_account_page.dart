@@ -49,6 +49,7 @@ class _AgainEditAccountPageState extends ConsumerState<AgainEditAccountPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          backgroundColor: Colors.red[900],
           leading: BackButton(
             onPressed: () async {
               if (image != null) {

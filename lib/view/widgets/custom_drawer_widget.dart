@@ -37,7 +37,7 @@ class CustomDrawer extends ConsumerWidget {
               appBar: AppBar(
                 title: const Text(''),
                 centerTitle: true,
-                // backgroundColor: SaunaPage.primary,
+                backgroundColor: Colors.red[900],
                 automaticallyImplyLeading: false,
                 leading: IconButton(
                   onPressed: () {
