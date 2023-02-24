@@ -28,6 +28,7 @@ class _CalenderPageState extends ConsumerState<CalenderPage> {
   @override
   Future<void> didChangeDependencies() async {
     super.didChangeDependencies();
+    //todo：ローディング　
     await ref.read(postNotifierProvider.notifier).fetch(
         creatorId: ref.watch(accountNotifierProvider).id,
         visitedDate: _focused
@@ -53,10 +54,26 @@ class _CalenderPageState extends ConsumerState<CalenderPage> {
                 },
               ),
             );
+            //todo:ローディング　
+            showDialog(
+              barrierDismissible: false,
+              context: context,
+              builder: (context) {
+                return Center(
+                  // Default Indicator.
+                  child: CircularProgressIndicator(color: Colors.red[900]),
+                );
+              },
+            );
+            try {
             await ref.read(postNotifierProvider.notifier).fetch(
                 creatorId: ref.watch(accountNotifierProvider).id,
                 visitedDate: _selected
             );
+            } finally {
+              // Dismiss the indicator.
+              Navigator.pop(context);
+            }
           },
           child: const Icon(Icons.add),
         ),
@@ -87,6 +104,7 @@ class _CalenderPageState extends ConsumerState<CalenderPage> {
                         _focused = focused;
                       });
                     }
+                    //todo:ローディング
                     await ref.read(postNotifierProvider.notifier).fetch(
                         creatorId: ref.watch(accountNotifierProvider).id,
                         visitedDate: _selected
@@ -174,11 +192,27 @@ class _CalenderPageState extends ConsumerState<CalenderPage> {
                                     Spacer(),
                                     IconButton(
                                         onPressed: () async {
+                                          //todo:ローディング
+                                          showDialog(
+                                          barrierDismissible: false,
+                                          context: context,
+                                          builder: (context) {
+                                          return Center(
+                                          // Default Indicator.
+                                          child: CircularProgressIndicator(color: Colors.red[900]),
+                                          );
+                                          },
+                                          );
+                                          try {
                                           await ref.read(postNotifierProvider.notifier).delete(index: index);
                                           await ref.read(postNotifierProvider.notifier).fetch(
                                               creatorId: ref.watch(accountNotifierProvider).id,
                                               visitedDate: _selected ?? _focused
                                           );
+                                          } finally {
+                                            // Dismiss the indicator.
+                                            Navigator.pop(context);
+                                          }
                                         },
                                         constraints: const BoxConstraints(),
                                         icon: Icon(

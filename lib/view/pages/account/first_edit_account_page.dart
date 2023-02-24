@@ -41,7 +41,17 @@ class FirstEditAccountPage extends ConsumerWidget {
               ),
               OutlinedButton(
                   onPressed: () async {
-                    //Todo: Widgetで使用する(riverpod)
+                    //Todo: Widgetで使用する(riverpod)　ローディング　初回ログインにてユーザー名登録をする処理
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                      return Center(
+                      // Default Indicator.
+                      child: CircularProgressIndicator(color: Colors.red[900]),
+                      );
+                      },
+                      );
+                      try{
                     await ref.read(accountNotifierProvider.notifier).post(uid: arguments.uid, userName: _userNameController.text);
                     Navigator.of(context).pushReplacement(
                       MaterialPageRoute(
@@ -50,7 +60,12 @@ class FirstEditAccountPage extends ConsumerWidget {
                         },
                       ),
                     );
+                      } finally {
+                        // Dismiss the indicator.
+                        Navigator.pop(context);
+                      }
                   },
+
                   child: const Text('決定')
               ),
             ],

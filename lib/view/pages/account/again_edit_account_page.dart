@@ -52,11 +52,26 @@ class _AgainEditAccountPageState extends ConsumerState<AgainEditAccountPage> {
           backgroundColor: Colors.red[900],
           leading: BackButton(
             onPressed: () async {
-              if (image != null) {
-                await uploadImage();
+              // Todo: ローディング 前mのページに戻った時にユーザー名やトプ画が変更される処理
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return Center(
+                    // Default Indicator.
+                    child: CircularProgressIndicator(color: Colors.red[900]),
+                  );
+                },
+              );
+              try{
+                if (image != null) {
+                  await uploadImage();
+                }
+                  await ref.read(accountNotifierProvider.notifier).update(newUserName: _userNameController.text,imagePath: imagePath);
+              } finally {
+                // Dismiss the indicator.
+                Navigator.pop(context);
+                Navigator.pop(context);//前のページに戻る
               }
-              await ref.read(accountNotifierProvider.notifier).update(newUserName: _userNameController.text,imagePath: imagePath);
-              Navigator.pop(context);//前のページに戻る
             },
           ),
         ),
