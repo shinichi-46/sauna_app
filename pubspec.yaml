@@ -39,8 +39,12 @@ flutter:
 flutter_icons:
   android: true
   ios: true
-  image_path: "lib/assets/icon.png"
+  image_path_ios: "lib/assets/icon.png"
+  image_path_android: "lib/assets/icon_android.png"
+  adaptive_icon_background: "FF5757"
 
 flutter_native_splash:
   image: "lib/assets/icon.png"
   color: "FF5757"
+  fullscreen: true
+  icon_background_color: "FF5757"

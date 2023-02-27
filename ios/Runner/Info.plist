@@ -59,6 +59,6 @@
 		<key>NSPhotoLibraryUsageDescription</key>
 		<string>写真フォルダへのアクセスを許可します</string>
 		<key>UIStatusBarHidden</key>
-		<false/>
+		<true/>
 	</dict>
 </plist>
