@@ -5,6 +5,7 @@ import 'package:sauna_app/repository/authentication/firebase_auth_repository.dar
 import 'package:sauna_app/view/pages/auth/login_page.dart';
 import 'package:sauna_app/viewmodel/base/account_state_notifier.dart';
 import 'package:sauna_app/viewmodel/base/post_state_notifier.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class CustomDrawer extends ConsumerWidget {
   CustomDrawer({Key? key}) : super(key: key);
@@ -13,7 +14,6 @@ class CustomDrawer extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-
     final List<String> menuItems = [
       'アカウント情報の設定',
       '利用規約',
@@ -24,20 +24,19 @@ class CustomDrawer extends ConsumerWidget {
 
     final List<String> menuPages = [
       SaunaPage.AGAIN_EDIT_ACCOUNT.screenName,
-      'https://harumich.github.io/Privacy_Policy_TurtleTask/terms_of_service',
-      'https://harumich.github.io/Privacy_Policy_TurtleTask/privacy_policy',
+      'https://shinichi-46.github.io/Privacy_Policy_SaunaRecord/terms_of_service',
+      'https://shinichi-46.github.io/Privacy_Policy_SaunaRecord/privacy_policy',
       SaunaPage.LICENSE.screenName
-
     ];
 
     return SizedBox(
       width: 280,
       child: Drawer(
-          child:Scaffold(
+          child: Scaffold(
               appBar: AppBar(
                 title: const Text(''),
                 centerTitle: true,
-                // backgroundColor: SaunaPage.primary,
+                backgroundColor: Colors.red[900],
                 automaticallyImplyLeading: false,
                 leading: IconButton(
                   onPressed: () {
@@ -52,12 +51,10 @@ class CustomDrawer extends ConsumerWidget {
                   return InkWell(
                     onTap: () async {
                       if (index == 1 || index == 2) {
-                        /*
                         launchUrl(
                           Uri.parse(menuPages[index]),
                         );
-                         */
-                      }else if (index == 4) {
+                      } else if (index == 4) {
                         await authRepository.signOut();
                         ref.read(postNotifierProvider.notifier).logOut();
                         ref.read(accountNotifierProvider.notifier).logOut();
@@ -90,10 +87,8 @@ class CustomDrawer extends ConsumerWidget {
                                       menuItems[index],
                                       style: const TextStyle(
                                           fontWeight: FontWeight.bold,
-                                          fontSize: 16
-                                      ),
+                                          fontSize: 16),
                                     ),
-
                                   ],
                                 ),
                               ),
@@ -113,9 +108,7 @@ class CustomDrawer extends ConsumerWidget {
                     ),
                   );
                 },
-              )
-          )
-      ),
+              ))),
     );
   }
 }

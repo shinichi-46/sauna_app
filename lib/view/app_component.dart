@@ -12,16 +12,17 @@ class AppComponent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      initialRoute: SaunaPage.LOGIN.screenName,
-      routes: {
-        SaunaPage.TAB.screenName: (_) => TabContainer(),
-        SaunaPage.LOGIN.screenName: (_) => LoginPage(),
-        SaunaPage.FIRST_EDIT_ACCOUNT.screenName: (_) => FirstEditAccountPage(),
-        SaunaPage.AGAIN_EDIT_ACCOUNT.screenName: (_) => AgainEditAccountPage(),
-        SaunaPage.UPDATE_POST.screenName: (_) => UpdatePostPage(),
-        SaunaPage.LICENSE.screenName: (_) => LicensePage(),
-      }
-    );
+        debugShowCheckedModeBanner: false,
+        initialRoute: SaunaPage.LOGIN.screenName,
+        routes: {
+          SaunaPage.TAB.screenName: (_) => TabContainer(),
+          SaunaPage.LOGIN.screenName: (_) => LoginPage(),
+          SaunaPage.FIRST_EDIT_ACCOUNT.screenName: (_) =>
+              FirstEditAccountPage(),
+          SaunaPage.AGAIN_EDIT_ACCOUNT.screenName: (_) =>
+              AgainEditAccountPage(),
+          SaunaPage.UPDATE_POST.screenName: (_) => UpdatePostPage(),
+          SaunaPage.LICENSE.screenName: (_) => LicensePage(),
+        });
   }
 }

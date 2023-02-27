@@ -1,4 +1,3 @@
-
 class LoginArguments {
   final String uid;
 

@@ -6,6 +6,7 @@ class Post {
   List<String>? imagePathList;
   String creatorId;
   String creatorName;
+  String? creatorIconImagePath;
   String visitedDate;
   DateTime createdDate;
   DateTime updateDate;
@@ -18,6 +19,7 @@ class Post {
     this.imagePathList,
     required this.creatorId,
     required this.creatorName,
+    required this.creatorIconImagePath,
     required this.visitedDate,
     required this.createdDate,
     required this.updateDate,

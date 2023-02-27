@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sauna_app/view/arguments/login_argument.dart';
@@ -7,19 +6,17 @@ import 'package:sauna_app/viewmodel/base/account_state_notifier.dart';
 
 // Todo: reiverpodを使うため、ConsumerWidgetまたはConsumerStatefulWidgetに変更する(riverpod)
 class FirstEditAccountPage extends ConsumerWidget {
-
   FirstEditAccountPage({Key? key}) : super(key: key);
 
   final _userNameController = TextEditingController();
 
   @override
   //Todo: "WidgetRef ref"を追加する(riverpod)
-  Widget build(BuildContext context,WidgetRef ref) {
-    LoginArguments arguments = ModalRoute.of(context)!.settings.arguments as LoginArguments;
+  Widget build(BuildContext context, WidgetRef ref) {
+    LoginArguments arguments =
+        ModalRoute.of(context)!.settings.arguments as LoginArguments;
     return Scaffold(
-        appBar: AppBar(
-
-        ),
+        appBar: AppBar(),
         body: Center(
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -32,7 +29,7 @@ class FirstEditAccountPage extends ConsumerWidget {
                 height: 50,
               ),
               Padding(
-                padding: const EdgeInsets.only(left: 50.0,right: 50.0),
+                padding: const EdgeInsets.only(left: 50.0, right: 50.0),
                 child: TextField(
                   controller: _userNameController,
                 ),
@@ -42,21 +39,36 @@ class FirstEditAccountPage extends ConsumerWidget {
               ),
               OutlinedButton(
                   onPressed: () async {
-                    //Todo: Widgetで使用する(riverpod)
-                    await ref.read(accountNotifierProvider.notifier).post(uid: arguments.uid, userName: _userNameController.text);
-                    Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(
-                        builder: (context) {
-                          return TabContainer();
-                        },
-                      ),
+                    //Todo: Widgetで使用する(riverpod)　ローディング　初回ログインにてユーザー名登録をする処理
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return Center(
+                          // Default Indicator.
+                          child:
+                              CircularProgressIndicator(color: Colors.red[900]),
+                        );
+                      },
                     );
+                    try {
+                      await ref.read(accountNotifierProvider.notifier).post(
+                          uid: arguments.uid,
+                          userName: _userNameController.text);
+                      Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(
+                          builder: (context) {
+                            return TabContainer();
+                          },
+                        ),
+                      );
+                    } finally {
+                      // Dismiss the indicator.
+                      Navigator.pop(context);
+                    }
                   },
-                  child: const Text('決定')
-              ),
+                  child: const Text('決定')),
             ],
           ),
-        )
-    );
+        ));
   }
 }

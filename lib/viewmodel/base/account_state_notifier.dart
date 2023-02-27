@@ -4,40 +4,44 @@ import 'package:sauna_app/viewmodel/model/accout_model.dart';
 
 //Todo: Providerの宣言(riverpod)
 final accountNotifierProvider =
-StateNotifierProvider<AccountStateNotifier, Account>(
-      (ref) => AccountStateNotifier(),
+    StateNotifierProvider<AccountStateNotifier, Account>(
+  (ref) => AccountStateNotifier(),
 );
-
 
 //Todo: StateNotifierを継承したクラスを作成(riverpod)
 class AccountStateNotifier extends StateNotifier<Account> {
   // `super([])` で、空のTODOリストを初期値として入れている。
-  AccountStateNotifier(): super(Account(id: '', userName: '', favoritePlaceList: [], iconImagePath: ''));
+  AccountStateNotifier()
+      : super(Account(
+            id: '', userName: '', favoritePlaceList: [], iconImagePath: ''));
 
   void logOut() {
-    state = Account(id: '', userName: '', favoritePlaceList: [], iconImagePath: '');
+    state =
+        Account(id: '', userName: '', favoritePlaceList: [], iconImagePath: '');
   }
 
   /// 新しいTODOを追加するメソッド
-  Future<bool>  canFetch({String? uid}) async {
-    final CollectionReference collection = FirebaseFirestore.instance.collection('user');
+  Future<bool> canFetch({String? uid}) async {
+    final CollectionReference collection =
+        FirebaseFirestore.instance.collection('user');
     DocumentSnapshot<Object?> doc = await collection.doc(uid).get();
     if (doc.exists) {
       state = Account(
           id: doc.id,
           userName: doc.get('user_name'),
-          favoritePlaceList: doc.get('favorite_place_list').cast<String?>() ?? [],
-          iconImagePath: doc.get('icon_image_path')
-      );
+          favoritePlaceList:
+              doc.get('favorite_place_list').cast<String?>() ?? [],
+          iconImagePath: doc.get('icon_image_path'));
       return true;
     } else {
       return false;
     }
   }
-  Future<void>  post({String? uid,String? userName}) async {
+
+  Future<void> post({String? uid, String? userName}) async {
     try {
-      final CollectionReference collection = FirebaseFirestore.instance
-          .collection('user');
+      final CollectionReference collection =
+          FirebaseFirestore.instance.collection('user');
       await collection.doc(uid).set({
         'id': uid,
         'user_name': userName,
@@ -48,36 +52,52 @@ class AccountStateNotifier extends StateNotifier<Account> {
           id: uid!,
           userName: userName!,
           favoritePlaceList: null,
-          iconImagePath: null
-      );
+          iconImagePath: null);
     } catch (err) {
       print('error');
     }
   }
-  Future<void>  update({String? newUserName, String? imagePath}) async {
+
+  Future<void> update(
+      {String? newUserName,
+      String? imagePath,
+      String? newFavoritePlace}) async {
     try {
-      if(newUserName != state.userName) {
+      if (newUserName != null && newUserName != state.userName) {
+        print('1');
         state = Account(
             id: state.id,
-            userName: newUserName!,
+            userName: newUserName,
             favoritePlaceList: state.favoritePlaceList,
-            iconImagePath: state.iconImagePath
-        );//viewmodel②の部分
+            iconImagePath: state.iconImagePath); //viewmodel②の部分
       }
-      if(imagePath != '') {
-        state = Account(id: state.id,
+      if (imagePath != null && imagePath != '') {
+        state = Account(
+            id: state.id,
             userName: state.userName,
             favoritePlaceList: state.favoritePlaceList,
-            iconImagePath: imagePath
+            iconImagePath: imagePath);
+      }
+      if (newFavoritePlace != null) {
+        List<String?> list = state.favoritePlaceList!;
+        list.add(newFavoritePlace);
+        state = Account(
+          id: state.id,
+          userName: state.userName,
+          favoritePlaceList: list,
+          iconImagePath: state.iconImagePath,
         );
       }
-      if(newUserName != state.userName || imagePath != '') {
-        FirebaseFirestore.instance.collection('user').doc(state.id).update({'user_name': state.userName, 'icon_image_path': state.iconImagePath});//repository③ の部分
+      if (newUserName != '' || imagePath != '' || newFavoritePlace != null) {
+        FirebaseFirestore.instance.collection('user').doc(state.id).update({
+          'user_name': state.userName,
+          'icon_image_path': state.iconImagePath,
+          'favorite_place_list': state.favoritePlaceList
+        }); //repository③ の部分
       }
     } catch (err) {
+      print(err);
       print('error');
     }
   }
 }
-
-
