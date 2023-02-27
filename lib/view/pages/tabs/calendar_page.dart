@@ -81,10 +81,6 @@ class _CalenderPageState extends ConsumerState<CalenderPage> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Text(
-                'カレンダー',
-                style: TextStyle(fontSize: 30),
-              ),
               Center(
                 child: TableCalendar(
                   locale: 'ja_JP',
@@ -142,6 +138,13 @@ class _CalenderPageState extends ConsumerState<CalenderPage> {
                   child: const Text('サウナ記録の更新画面に遷移する')
               ),
                */
+              const Divider(
+                height: 1,
+                thickness: 0.2,
+                indent: 0,
+                endIndent: 0,
+                color: Colors.black,
+              ),
             Container(
               height: 330,
               child: ListView.builder(
@@ -187,7 +190,11 @@ class _CalenderPageState extends ConsumerState<CalenderPage> {
                                           backgroundImage: NetworkImage(ref.watch(accountNotifierProvider).iconImagePath!)),
                                     Padding(
                                       padding: const EdgeInsets.only(left: 8.0),
-                                      child: Text(list[index].creatorName),
+                                      child: SizedBox(
+                                        width: 250,
+                                        child: Text(list[index].creatorName,
+                                          overflow: TextOverflow.clip,),
+                                      ),
                                     ),
                                     Spacer(),
                                     IconButton(
@@ -232,7 +239,7 @@ class _CalenderPageState extends ConsumerState<CalenderPage> {
                               Padding(
                                 padding: const EdgeInsets.only(left: 10.0),
                                 child: Text(list[index].placeName,
-                                  style:TextStyle(fontSize: 20) ,),
+                                  style:TextStyle(fontSize: 20,) ,),
                               ),
                               Padding(
                                 padding: const EdgeInsets.only(left: 10.0),
@@ -245,7 +252,7 @@ class _CalenderPageState extends ConsumerState<CalenderPage> {
                               Padding(
                                 padding: const EdgeInsets.only(left: 10.0),
                                 child: Text(list[index].memo!,
-                                  style: TextStyle(fontSize: 20),),
+                                  style: TextStyle(fontSize: 16),),
                               ),//自分で書いてみた、チェックお願いしてもらう
                               Padding(
                                 padding: const EdgeInsets.only(bottom: 8.0),

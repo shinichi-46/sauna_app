@@ -126,6 +126,7 @@ class _AgainEditAccountPageState extends ConsumerState<AgainEditAccountPage> {
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
+                        overflow: TextOverflow.clip,
                         'お気に入り施設',
                         style: TextStyle(fontSize: 20),
                       ),
@@ -145,7 +146,9 @@ class _AgainEditAccountPageState extends ConsumerState<AgainEditAccountPage> {
                           ),
                         ),
                       ),
-                      Text('${ref.watch(accountNotifierProvider).favoritePlaceList![index-1]}'),
+                      SizedBox(
+                        width: 200,
+                          child: Text('${ref.watch(accountNotifierProvider).favoritePlaceList![index-1]}',overflow: TextOverflow.clip,)),
                     ],
                   )
                 ],

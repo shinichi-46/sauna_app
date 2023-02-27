@@ -74,7 +74,9 @@ class _TimeLinePageState extends ConsumerState<TimeLinePage> {
                                       backgroundImage: NetworkImage(ref.watch(postNotifierProvider)[index].creatorIconImagePath!)),
                                   Padding(
                                     padding: const EdgeInsets.only(left: 8.0),
-                                    child: Text(ref.watch(postNotifierProvider)[index].creatorName),
+                                    child: SizedBox(
+                                        width: 150,
+                                        child: Text(ref.watch(postNotifierProvider)[index].creatorName,overflow: TextOverflow.clip,)),
                                   ),
                                   Spacer(),
                                   Padding(
@@ -106,7 +108,7 @@ class _TimeLinePageState extends ConsumerState<TimeLinePage> {
                             Padding(
                               padding: const EdgeInsets.only(left: 10.0),
                               child: Text(ref.watch(postNotifierProvider)[index].memo!,
-                                style: TextStyle(fontSize: 20),),
+                                style: TextStyle(fontSize: 16),),
                             ),//自分で書いてみた、チェックお願いしてもらう
                             Padding(
                               padding: const EdgeInsets.only(bottom: 8.0),
