@@ -7,7 +7,7 @@ class TimeLinePage extends ConsumerStatefulWidget {
   const TimeLinePage({Key? key}) : super(key: key);
 
   @override
-ConsumerState<TimeLinePage> createState() => _TimeLinePageState();
+  ConsumerState<TimeLinePage> createState() => _TimeLinePageState();
 }
 
 class _TimeLinePageState extends ConsumerState<TimeLinePage> {
@@ -16,38 +16,39 @@ class _TimeLinePageState extends ConsumerState<TimeLinePage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    // String creatorId = ref.watch(accountNotifierProvider).id;
     ref.read(postNotifierProvider.notifier).fetch();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.red[900],
-          title: Text ('タイムライン'),
-          automaticallyImplyLeading: false,
-        ),
-        endDrawer: CustomDrawer(),
-        body: ref.watch(postNotifierProvider).isEmpty
-        ? Center(child: Text('投稿が見つかりません', style: TextStyle(fontWeight: FontWeight.bold)))
-        : ListView.builder(
-            itemCount: ref.watch(postNotifierProvider).length,
-            itemBuilder: (BuildContext context, int index) {
-              return Column(
-                children: [
-                  Visibility(
-                    visible: index != 0,
-                    child: const Divider(
-                      height: 1,
-                      thickness: 0.2,
-                      indent: 0,
-                      endIndent: 0,
-                      color: Colors.black,
+      appBar: AppBar(
+        backgroundColor: Colors.red[900],
+        title: Text('タイムライン'),
+        automaticallyImplyLeading: false,
+      ),
+      endDrawer: CustomDrawer(),
+      body: ref.watch(postNotifierProvider).isEmpty
+          ? Center(
+              child: Text('投稿が見つかりません',
+                  style: TextStyle(fontWeight: FontWeight.bold)))
+          : ListView.builder(
+              itemCount: ref.watch(postNotifierProvider).length,
+              itemBuilder: (BuildContext context, int index) {
+                return Column(
+                  children: [
+                    Visibility(
+                      visible: index != 0,
+                      child: const Divider(
+                        height: 1,
+                        thickness: 0.2,
+                        indent: 0,
+                        endIndent: 0,
+                        color: Colors.black,
+                      ),
                     ),
-                  ),
-                  Container(
-                    color: Colors.white,
+                    Container(
+                      color: Colors.white,
                       child: Padding(
                         padding: const EdgeInsets.only(left: 10.0),
                         child: Column(
@@ -56,129 +57,182 @@ class _TimeLinePageState extends ConsumerState<TimeLinePage> {
                             Padding(
                               padding: const EdgeInsets.only(top: 8.0),
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
-                                  ref.watch(postNotifierProvider)[index].creatorIconImagePath == ''
+                                  ref
+                                              .watch(
+                                                  postNotifierProvider)[index]
+                                              .creatorIconImagePath ==
+                                          ''
                                       ? Container(
-                                      height: 60,
-                                      width: 60,
-                                      decoration: BoxDecoration(
-                                        border: Border.all(color: Colors.black),
-                                        shape: BoxShape.circle,
-                                      ),
-                                      child: Icon(
-                                          Icons.add_a_photo,
-                                          size: 30))
+                                          height: 60,
+                                          width: 60,
+                                          decoration: BoxDecoration(
+                                            border:
+                                                Border.all(color: Colors.black),
+                                            shape: BoxShape.circle,
+                                          ),
+                                          child:
+                                              Icon(Icons.add_a_photo, size: 30))
                                       : CircleAvatar(
-                                      radius: 30,
-                                      backgroundImage: NetworkImage(ref.watch(postNotifierProvider)[index].creatorIconImagePath!)),
+                                          radius: 30,
+                                          backgroundImage: NetworkImage(ref
+                                              .watch(
+                                                  postNotifierProvider)[index]
+                                              .creatorIconImagePath!)),
                                   Padding(
                                     padding: const EdgeInsets.only(left: 8.0),
                                     child: SizedBox(
                                         width: 150,
-                                        child: Text(ref.watch(postNotifierProvider)[index].creatorName,overflow: TextOverflow.clip,)),
+                                        child: Text(
+                                          ref
+                                              .watch(
+                                                  postNotifierProvider)[index]
+                                              .creatorName,
+                                          overflow: TextOverflow.clip,
+                                        )),
                                   ),
                                   Spacer(),
                                   Padding(
                                     padding: const EdgeInsets.only(right: 10.0),
-                                    child: Text('${ref.watch(postNotifierProvider)[index].createdDate.year}/${ref.watch(postNotifierProvider)[index].createdDate.month}/${ref.watch(postNotifierProvider)[index].createdDate.day}　${ref.watch(postNotifierProvider)[index].createdDate.hour}：${ref.watch(postNotifierProvider)[index].createdDate.minute}',),
+                                    child: Text(
+                                      '${ref.watch(postNotifierProvider)[index].createdDate.year}/${ref.watch(postNotifierProvider)[index].createdDate.month}/${ref.watch(postNotifierProvider)[index].createdDate.day}　${ref.watch(postNotifierProvider)[index].createdDate.hour}：${ref.watch(postNotifierProvider)[index].createdDate.minute}',
+                                    ),
                                   ),
                                 ],
                               ),
                             ),
-                            evaluationWidget(ref.watch(postNotifierProvider)[index].evaluationStatus),
+                            evaluationWidget(ref
+                                .watch(postNotifierProvider)[index]
+                                .evaluationStatus),
                             Padding(
                               padding: const EdgeInsets.only(left: 10.0),
-                              child: Text('施設名',
-                                style: TextStyle(color: Colors.grey),),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 10.0),
-                              child: Text(ref.watch(postNotifierProvider)[index].placeName,
-                                style:TextStyle(fontSize: 20) ,),
-                            ),
-                            Visibility(
-                              visible: ref.watch(postNotifierProvider)[index].memo!.isNotEmpty,//投稿画面のメモがnullの時、'メモ'を表示させない→自分で書いてみた、チェックお願いしてもらう
-                              child: Padding(
-                                padding: const EdgeInsets.only(left: 10.0),
-                                child: Text('メモ',
-                                  style: TextStyle(color: Colors.grey),),
+                              child: Text(
+                                '施設名',
+                                style: TextStyle(color: Colors.grey),
                               ),
                             ),
                             Padding(
                               padding: const EdgeInsets.only(left: 10.0),
-                              child: Text(ref.watch(postNotifierProvider)[index].memo!,
-                                style: TextStyle(fontSize: 16),),
-                            ),//自分で書いてみた、チェックお願いしてもらう
+                              child: Text(
+                                ref
+                                    .watch(postNotifierProvider)[index]
+                                    .placeName,
+                                style: TextStyle(fontSize: 20),
+                              ),
+                            ),
+                            Visibility(
+                              visible: ref
+                                  .watch(postNotifierProvider)[index]
+                                  .memo!
+                                  .isNotEmpty,
+                              //投稿画面のメモがnullの時、'メモ'を表示させない→自分で書いてみた、チェックお願いしてもらう
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 10.0),
+                                child: Text(
+                                  'メモ',
+                                  style: TextStyle(color: Colors.grey),
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 10.0),
+                              child: Text(
+                                ref.watch(postNotifierProvider)[index].memo!,
+                                style: TextStyle(fontSize: 16),
+                              ),
+                            ), //自分で書いてみた、チェックお願いしてもらう
                             Padding(
                               padding: const EdgeInsets.only(bottom: 8.0),
                               child: Visibility(
-                                visible: ref.watch(postNotifierProvider)[index].imagePathList!.isNotEmpty,
+                                visible: ref
+                                    .watch(postNotifierProvider)[index]
+                                    .imagePathList!
+                                    .isNotEmpty,
                                 child: Container(
                                   height: 200,
-                                  child: ListView.builder( scrollDirection: Axis.horizontal,
-                                    itemCount: ref.watch(postNotifierProvider)[index].imagePathList!.length,
-                                    itemBuilder: (context, i) {
-                                      return GestureDetector(
-                                        onTap: () {
-                                          showGeneralDialog(
-                                            transitionDuration: Duration(milliseconds: 1000),
-                                            barrierDismissible: true,
-                                            barrierLabel: '',
-                                            context: context,
-                                            pageBuilder: (context, animation1, animation2) {
-                                              return DefaultTextStyle(
-                                                style: Theme.of(context)
-                                                    .primaryTextTheme
-                                                    .bodyText1!,
-                                                child: Center(
-                                                  child: Container(
-                                                    child: SingleChildScrollView(
-                                                        child: InteractiveViewer(
-                                                          minScale: 0.1,
-                                                          maxScale: 5,
-                                                          child: Container(
-                                                            child: Image.network(ref.watch(postNotifierProvider)[index].imagePathList![i]
-                                                            ),
-                                                          ),
-                                                        )),
+                                  child: ListView.builder(
+                                      scrollDirection: Axis.horizontal,
+                                      itemCount: ref
+                                          .watch(postNotifierProvider)[index]
+                                          .imagePathList!
+                                          .length,
+                                      itemBuilder: (context, i) {
+                                        return GestureDetector(
+                                          onTap: () {
+                                            showGeneralDialog(
+                                              transitionDuration:
+                                                  Duration(milliseconds: 1000),
+                                              barrierDismissible: true,
+                                              barrierLabel: '',
+                                              context: context,
+                                              pageBuilder: (context, animation1,
+                                                  animation2) {
+                                                return DefaultTextStyle(
+                                                  style: Theme.of(context)
+                                                      .primaryTextTheme
+                                                      .bodyText1!,
+                                                  child: Center(
+                                                    child: Container(
+                                                      child:
+                                                          SingleChildScrollView(
+                                                              child:
+                                                                  InteractiveViewer(
+                                                        minScale: 0.1,
+                                                        maxScale: 5,
+                                                        child: Container(
+                                                          child: Image.network(ref
+                                                              .watch(postNotifierProvider)[
+                                                                  index]
+                                                              .imagePathList![i]),
+                                                        ),
+                                                      )),
+                                                    ),
                                                   ),
-                                                ),
-                                              );
-                                            },
-                                          );
-                                        },
-                                        child: Container(
-                                            height: 200,width: 200,
-                                            child: Image.network(ref.watch(postNotifierProvider)[index].imagePathList![i], fit: BoxFit.fill,)
-                                    ),
-                                      );
-                                  }
-                                  ),
+                                                );
+                                              },
+                                            );
+                                          },
+                                          child: Container(
+                                              height: 200,
+                                              width: 200,
+                                              child: Image.network(
+                                                ref
+                                                    .watch(postNotifierProvider)[
+                                                        index]
+                                                    .imagePathList![i],
+                                                fit: BoxFit.fill,
+                                              )),
+                                        );
+                                      }),
                                 ),
                               ),
                             ),
                           ],
                         ),
                       ),
-                  ),
-                ],
-              );
-            },
-          ),
+                    ),
+                  ],
+                );
+              },
+            ),
     );
-  }//buildの中には関数は書いていけない。バグが起きる可能性があるため。
+  } //buildの中には関数は書いていけない。バグが起きる可能性があるため。
+
   //↓　Widgetの部分は使いたいデータ型で表す。今回の場合、Rowに適応させたいためWidget型で表している。極論Widgetの部分をRowと書いても問題ない。企業ではWidget型と書くことが多い。
-  Widget evaluationWidget(int evaluationStatus) {//evaluationWidgetは自分で決めた名前で良い。データ型、関数名、引数の形で表す。
-    switch(evaluationStatus){
+  Widget evaluationWidget(int evaluationStatus) {
+    //evaluationWidgetは自分で決めた名前で良い。データ型、関数名、引数の形で表す。
+    switch (evaluationStatus) {
       case 0:
-        return  Row(
+        return Row(
           children: [
             Padding(
               padding: const EdgeInsets.all(5.0),
               child: Icon(
                 Icons.sentiment_very_satisfied,
-                size: 50,color: Colors.blue,
+                size: 50,
+                color: Colors.blue,
               ),
             ),
             Padding(
@@ -188,13 +242,14 @@ class _TimeLinePageState extends ConsumerState<TimeLinePage> {
           ],
         );
       case 1:
-        return  Row(
+        return Row(
           children: [
             Padding(
               padding: const EdgeInsets.all(5.0),
               child: Icon(
                 Icons.sentiment_neutral,
-                size: 50,color: Colors.yellow,
+                size: 50,
+                color: Colors.yellow,
               ),
             ),
             Padding(
@@ -204,13 +259,14 @@ class _TimeLinePageState extends ConsumerState<TimeLinePage> {
           ],
         );
       case 2:
-        return  Row(
+        return Row(
           children: [
             Padding(
               padding: const EdgeInsets.all(5.0),
               child: Icon(
                 Icons.sentiment_very_dissatisfied,
-                size: 50,color: Colors.red,
+                size: 50,
+                color: Colors.red,
               ),
             ),
             Padding(
@@ -220,7 +276,7 @@ class _TimeLinePageState extends ConsumerState<TimeLinePage> {
           ],
         );
       default:
-        return  Row(
+        return Row(
           children: [
             Icon(
               Icons.sentiment_neutral,

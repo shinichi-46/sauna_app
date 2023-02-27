@@ -17,7 +17,6 @@ class AuthRepository {
       final googleUser = await GoogleSignIn(scopes: [
         'email',
       ]).signIn();
-
       // リクエストから、認証情報を取得
       final googleAuth = await googleUser!.authentication;
       // クレデンシャルを新しく作成

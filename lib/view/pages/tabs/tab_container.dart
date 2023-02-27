@@ -3,7 +3,6 @@ import 'package:sauna_app/view/pages/tabs/calendar_page.dart';
 import 'package:sauna_app/view/pages/tabs/timeline_page.dart';
 
 class TabContainer extends StatefulWidget {
-
   @override
   State<StatefulWidget> createState() => _TabContainer();
 }
@@ -22,23 +21,23 @@ class _TabContainer extends State<TabContainer> {
       // backgroundColor: SaunaColor.primary,
       body: _tabs[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
-            iconSize: 20,
-            currentIndex: _currentIndex,
-            onTap: _onTabTapped,
-            items: const [
-              BottomNavigationBarItem(
-                icon: Icon(Icons.flag),
-                label: 'カレンダー',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.format_list_numbered_sharp),
-                label: 'タイムライン',
-              ),
-            ],
-            // backgroundColor: SaunaColor.primary,
-            selectedItemColor: Colors.red[900],
-            // unselectedItemColor: SaunaColor.tabText,
+        iconSize: 20,
+        currentIndex: _currentIndex,
+        onTap: _onTabTapped,
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.flag),
+            label: 'カレンダー',
           ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.format_list_numbered_sharp),
+            label: 'タイムライン',
+          ),
+        ],
+        // backgroundColor: SaunaColor.primary,
+        selectedItemColor: Colors.red[900],
+        // unselectedItemColor: SaunaColor.tabText,
+      ),
     );
   }
 

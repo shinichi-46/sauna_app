@@ -4,10 +4,9 @@ import 'package:sauna_app/viewmodel/model/post_model.dart';
 
 //Todo: Providerの宣言(riverpod)
 final postNotifierProvider =
-StateNotifierProvider<PostStateNotifier, List<Post>>(
-      (ref) => PostStateNotifier(),
+    StateNotifierProvider<PostStateNotifier, List<Post>>(
+  (ref) => PostStateNotifier(),
 );
-
 
 //Todo: StateNotifierを継承したクラスを作成(riverpod)
 class PostStateNotifier extends StateNotifier<List<Post>> {
@@ -19,11 +18,19 @@ class PostStateNotifier extends StateNotifier<List<Post>> {
   }
 
   Future<void> create(
-      {required String placeName, String? memo, required int evaluationStatus, List<
-          String>? imagePathList, required String creatorId, required String creatorName, required String creatorIconImagePath, required DateTime visitedDate, required DateTime createdDate, required DateTime updateDate}) async {
+      {required String placeName,
+      String? memo,
+      required int evaluationStatus,
+      List<String>? imagePathList,
+      required String creatorId,
+      required String creatorName,
+      required String creatorIconImagePath,
+      required DateTime visitedDate,
+      required DateTime createdDate,
+      required DateTime updateDate}) async {
     try {
-      final CollectionReference collection = FirebaseFirestore.instance
-          .collection('post');
+      final CollectionReference collection =
+          FirebaseFirestore.instance.collection('post');
       await collection.doc().set({
         'placeName': placeName,
         'memo': memo,
@@ -32,7 +39,8 @@ class PostStateNotifier extends StateNotifier<List<Post>> {
         'creatorId': creatorId,
         'creatorName': creatorName,
         'creatorIconImagePath': creatorIconImagePath,
-        'visitedDate': '${visitedDate.year}/${visitedDate.month}/${visitedDate.day}',
+        'visitedDate':
+            '${visitedDate.year}/${visitedDate.month}/${visitedDate.day}',
         'createdDate': createdDate,
         'updateDate': updateDate,
       });
@@ -44,26 +52,35 @@ class PostStateNotifier extends StateNotifier<List<Post>> {
   Future<void> fetch({String? creatorId, DateTime? visitedDate}) async {
     try {
       late QuerySnapshot snapshot;
-      final CollectionReference collection = FirebaseFirestore.instance.collection('post');
+      final CollectionReference collection =
+          FirebaseFirestore.instance.collection('post');
       if (creatorId == null || visitedDate == null) {
-        snapshot = await collection.orderBy('createdDate', descending: true).get();//タイムラインの投稿順を投稿日の新しい順にソートしている。
+        snapshot = await collection
+            .orderBy('createdDate', descending: true)
+            .get(); //タイムラインの投稿順を投稿日の新しい順にソートしている。
       } else {
-        snapshot = await collection.where('creatorId', isEqualTo: creatorId).where('visitedDate', isEqualTo: '${visitedDate.year}/${visitedDate.month}/${visitedDate.day}').orderBy('createdDate', descending: true).get();//カレンダーの投稿順を投稿日の新しい順にソートしている。
+        snapshot = await collection
+            .where('creatorId', isEqualTo: creatorId)
+            .where('visitedDate',
+                isEqualTo:
+                    '${visitedDate.year}/${visitedDate.month}/${visitedDate.day}')
+            .orderBy('createdDate', descending: true)
+            .get(); //カレンダーの投稿順を投稿日の新しい順にソートしている。
       }
       List<Post> postList = [];
       for (var doc in snapshot.docs) {
         postList.add(Post(
-            id: doc.id,
-            placeName: doc.get('placeName'),
-            memo: doc.get('memo'),
-            evaluationStatus: doc.get('evaluationStatus'),
-            imagePathList: doc.get('imagePathList').cast<String>() ?? [],
-            creatorId: doc.get('creatorId'),
-            creatorName: doc.get('creatorName'),
-            creatorIconImagePath: doc.get('creatorIconImagePath') ?? '',
-            visitedDate: doc.get('visitedDate'),
-            createdDate: doc.get('createdDate').toDate(),
-            updateDate: doc.get('updateDate').toDate(),
+          id: doc.id,
+          placeName: doc.get('placeName'),
+          memo: doc.get('memo'),
+          evaluationStatus: doc.get('evaluationStatus'),
+          imagePathList: doc.get('imagePathList').cast<String>() ?? [],
+          creatorId: doc.get('creatorId'),
+          creatorName: doc.get('creatorName'),
+          creatorIconImagePath: doc.get('creatorIconImagePath') ?? '',
+          visitedDate: doc.get('visitedDate'),
+          createdDate: doc.get('createdDate').toDate(),
+          updateDate: doc.get('updateDate').toDate(),
         ));
       }
       state = postList;
@@ -72,11 +89,11 @@ class PostStateNotifier extends StateNotifier<List<Post>> {
       print('error');
     }
   }
-  Future<void> delete(
-      {required int index}) async {
+
+  Future<void> delete({required int index}) async {
     try {
-      final CollectionReference collection = FirebaseFirestore.instance
-          .collection('post');
+      final CollectionReference collection =
+          FirebaseFirestore.instance.collection('post');
       await collection.doc(state[index].id).delete();
       /*
       List<Post> list = state;

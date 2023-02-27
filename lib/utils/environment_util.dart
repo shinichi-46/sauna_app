@@ -1,7 +1,4 @@
-enum BuildType {
-  Product,
-  Develop
-}
+enum BuildType { Product, Develop }
 
 class EnvironmentUtil {
   static BuildType getBuildType() {

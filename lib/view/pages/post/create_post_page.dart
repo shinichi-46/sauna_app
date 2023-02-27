@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -6,9 +7,9 @@ import 'package:image_picker/image_picker.dart';
 import 'package:sauna_app/viewmodel/base/account_state_notifier.dart';
 import 'package:sauna_app/viewmodel/base/post_state_notifier.dart';
 
-
 class CreatePostPage extends ConsumerStatefulWidget {
-  const CreatePostPage({Key? key, required this.selectedDate}) : super(key: key);
+  const CreatePostPage({Key? key, required this.selectedDate})
+      : super(key: key);
   final DateTime selectedDate;
 
   @override
@@ -16,27 +17,24 @@ class CreatePostPage extends ConsumerStatefulWidget {
 }
 
 class _CreatePostPageState extends ConsumerState<CreatePostPage> {
-
   final _placeNameController = TextEditingController();
   int? evaluationStatus;
   bool _flag = false;
   bool canNotPressed = false;
   String memo = '';
 
-
   final ImagePicker _picker = ImagePicker();
   List<File> images = [];
   List<String> imagePathList = [];
 
-
-  Future<void> uploadImage() async{
-    for (File image in images){
+  Future<void> uploadImage() async {
+    for (File image in images) {
       String path = image.path.substring(image.path.lastIndexOf('/') + 1);
       final ref = FirebaseStorage.instance.ref(path);
       final storedImage = await ref.putData(image.readAsBytesSync());
       String imagePath = await storedImage.ref.getDownloadURL();
       imagePathList.add(imagePath);
-      setState(() {});//FireBaseストレージに登録
+      setState(() {}); //FireBaseストレージに登録
     }
   }
 
@@ -46,50 +44,57 @@ class _CreatePostPageState extends ConsumerState<CreatePostPage> {
     return Focus(
         focusNode: focusNode,
         child: GestureDetector(
-        onTap: focusNode.requestFocus,
+          onTap: focusNode.requestFocus,
           child: Scaffold(
-          appBar: AppBar(
-            backgroundColor: Colors.red[900],
-          ),
-          body: SingleChildScrollView(
-            child: Column(
+            appBar: AppBar(
+              backgroundColor: Colors.red[900],
+            ),
+            body: SingleChildScrollView(
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
                     height: 80,
                     child: const Padding(
-                      padding: EdgeInsets.only(left: 10,top: 10),
+                      padding: EdgeInsets.only(left: 10, top: 10),
                       child: Text(
                         '記録',
-                        style: const TextStyle(fontSize: 35,fontWeight: FontWeight.bold),
+                        style: const TextStyle(
+                            fontSize: 35, fontWeight: FontWeight.bold),
                       ),
                     ),
                   ),
                   const Divider(
-                      height: 1,
-                      thickness: 0.2,
-                      indent: 10,
-                      endIndent: 10,
-                      color: Colors.black,
-                    ),
+                    height: 1,
+                    thickness: 0.2,
+                    indent: 10,
+                    endIndent: 10,
+                    color: Colors.black,
+                  ),
                   Container(
                     height: 50,
                     child: Row(
                       children: [
                         const Padding(
-                          padding: EdgeInsets.only(left: 10,),
+                          padding: EdgeInsets.only(
+                            left: 10,
+                          ),
                           child: Text(
                             '日時',
-                            style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold),
                           ),
                         ),
                         const Spacer(),
                         Padding(
-                          padding: const EdgeInsets.only(right: 10,),
-                          child: Text(
-                            '${widget.selectedDate.year}年${widget.selectedDate.month}月${widget.selectedDate.day}日',
-                            style: const TextStyle(fontSize: 15,)
+                          padding: const EdgeInsets.only(
+                            right: 10,
                           ),
+                          child: Text(
+                              '${widget.selectedDate.year}年${widget.selectedDate.month}月${widget.selectedDate.day}日',
+                              style: const TextStyle(
+                                fontSize: 15,
+                              )),
                         ),
                       ],
                     ),
@@ -104,12 +109,14 @@ class _CreatePostPageState extends ConsumerState<CreatePostPage> {
                   const Padding(
                     padding: EdgeInsets.only(left: 10),
                     child: Text(
-                        '評価',
-                      style: const TextStyle(fontSize: 20,fontWeight: FontWeight.bold),
+                      '評価',
+                      style: const TextStyle(
+                          fontSize: 20, fontWeight: FontWeight.bold),
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(top: 10, right: 30, bottom: 10, left: 30),
+                    padding: const EdgeInsets.only(
+                        top: 10, right: 30, bottom: 10, left: 30),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -122,49 +129,49 @@ class _CreatePostPageState extends ConsumerState<CreatePostPage> {
                               },
                               child: Icon(
                                 Icons.sentiment_very_satisfied,
-                                color: evaluationStatus == 0 ? Colors.blue : Colors.grey,
+                                color: evaluationStatus == 0
+                                    ? Colors.blue
+                                    : Colors.grey,
                                 size: 70,
                               ),
                             ),
-                            const Text(
-                                '良い'
-                            ),
+                            const Text('良い'),
                           ],
                         ),
                         Column(
                           children: [
                             GestureDetector(
-                              onTap:() {
+                              onTap: () {
                                 evaluationStatus = 1;
                                 setState(() {});
                               },
                               child: Icon(
                                 Icons.sentiment_neutral,
-                                color: evaluationStatus == 1 ? Colors.yellow : Colors.grey,
+                                color: evaluationStatus == 1
+                                    ? Colors.yellow
+                                    : Colors.grey,
                                 size: 70,
                               ),
                             ),
-                            const Text(
-                                '普通'
-                            ),
+                            const Text('普通'),
                           ],
                         ),
                         Column(
                           children: [
                             GestureDetector(
-                              onTap:() {
+                              onTap: () {
                                 evaluationStatus = 2;
                                 setState(() {});
                               },
                               child: Icon(
                                 Icons.sentiment_very_dissatisfied,
-                                color: evaluationStatus == 2 ? Colors.red : Colors.grey,
+                                color: evaluationStatus == 2
+                                    ? Colors.red
+                                    : Colors.grey,
                                 size: 70,
                               ),
                             ),
-                            const Text(
-                                '悪い'
-                            ),
+                            const Text('悪い'),
                           ],
                         ),
                       ],
@@ -182,7 +189,9 @@ class _CreatePostPageState extends ConsumerState<CreatePostPage> {
                       Padding(
                         padding: EdgeInsets.only(left: 10),
                         child: Text(
-                          '施設名',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),
+                          '施設名',
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
                         ),
                       ),
                     ],
@@ -199,7 +208,10 @@ class _CreatePostPageState extends ConsumerState<CreatePostPage> {
                             ),
                             controller: _placeNameController,
                             onChanged: (text) {
-                              if (ref.watch(accountNotifierProvider).favoritePlaceList!.contains(text)) {
+                              if (ref
+                                  .watch(accountNotifierProvider)
+                                  .favoritePlaceList!
+                                  .contains(text)) {
                                 canNotPressed = true;
                                 _flag = false;
                               } else {
@@ -212,82 +224,99 @@ class _CreatePostPageState extends ConsumerState<CreatePostPage> {
                         ),
                       ),
                       GestureDetector(
-                        child: Text(
+                          child: Text(
                             '選択',
-                          style: TextStyle(
-                              fontSize: 20,fontWeight: FontWeight.bold, color: Colors.red[900],
-                          ),),
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.red[900],
+                            ),
+                          ),
                           onTapDown: (details) {
-                            if (ref.watch(accountNotifierProvider).favoritePlaceList!.isEmpty) {
+                            if (ref
+                                .watch(accountNotifierProvider)
+                                .favoritePlaceList!
+                                .isEmpty) {
                               // 何もしない
                             } else {
                               final position = details.globalPosition;
                               showMenu(
                                 context: context,
-                                position: RelativeRect.fromLTRB(position.dx, position.dy, 0, 0),
+                                position: RelativeRect.fromLTRB(
+                                    position.dx, position.dy, 0, 0),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10.0),
                                 ),
                                 items: [
-                                  for (int i = 0; i < ref.watch(accountNotifierProvider).favoritePlaceList!.length; i++)
+                                  for (int i = 0;
+                                      i <
+                                          ref
+                                              .watch(accountNotifierProvider)
+                                              .favoritePlaceList!
+                                              .length;
+                                      i++)
                                     PopupMenuItem(
                                       value: i,
                                       child: Text(
-                                        ref.watch(accountNotifierProvider).favoritePlaceList![i]!,
+                                        ref
+                                            .watch(accountNotifierProvider)
+                                            .favoritePlaceList![i]!,
                                       ),
                                     )
                                 ],
                                 elevation: 8.0,
                               ).then((value) async {
-                                _placeNameController.text = ref.watch(accountNotifierProvider).favoritePlaceList![value!]!;
+                                _placeNameController.text = ref
+                                    .watch(accountNotifierProvider)
+                                    .favoritePlaceList![value!]!;
                                 canNotPressed = true;
                                 _flag = false;
                                 setState(() {});
                               });
                             }
-                          }
-                      ),
+                          }),
                     ],
                   ),
                   Container(
-                    child: canNotPressed
-                        ? Stack(
-                          children: [
-                            Row(
-                                children: [
-                                  Checkbox(
-                                    checkColor: Colors.white,
-                                    activeColor: Colors.red[900],
-                                    value: _flag,
-                                    onChanged: (bool? e) {
-                                      _flag = e!;
-                                      setState(() {});
-                                    },// チェックボックスをタップした際のイベントハンドラ
-                                  ),
-                                  const Text('お気に入りに追加'),
-                                ],
-                              ),
-                            Container(
-                              color: Theme.of(context).scaffoldBackgroundColor.withOpacity(0.6),
-                              height: 40,
-                            ),
-                          ],
-                        )
-                        : Row(
-                            children: [
-                              Checkbox(
-                                checkColor: Colors.white,
-                                activeColor: Colors.red[900],
-                                value: _flag,
-                                onChanged: (bool? e) {
-                                  _flag = e!;
-                                  setState(() {});
-                                },// チェックボックスをタップした際のイベントハンドラ
-                              ),
-                              const Text('お気に入りに追加'),
-                            ],
-                          )
-                  ),
+                      child: canNotPressed
+                          ? Stack(
+                              children: [
+                                Row(
+                                  children: [
+                                    Checkbox(
+                                      checkColor: Colors.white,
+                                      activeColor: Colors.red[900],
+                                      value: _flag,
+                                      onChanged: (bool? e) {
+                                        _flag = e!;
+                                        setState(() {});
+                                      }, // チェックボックスをタップした際のイベントハンドラ
+                                    ),
+                                    const Text('お気に入りに追加'),
+                                  ],
+                                ),
+                                Container(
+                                  color: Theme.of(context)
+                                      .scaffoldBackgroundColor
+                                      .withOpacity(0.6),
+                                  height: 40,
+                                ),
+                              ],
+                            )
+                          : Row(
+                              children: [
+                                Checkbox(
+                                  checkColor: Colors.white,
+                                  activeColor: Colors.red[900],
+                                  value: _flag,
+                                  onChanged: (bool? e) {
+                                    _flag = e!;
+                                    setState(() {});
+                                  }, // チェックボックスをタップした際のイベントハンドラ
+                                ),
+                                const Text('お気に入りに追加'),
+                              ],
+                            )),
                   const Divider(
                     height: 1,
                     thickness: 0.2,
@@ -300,8 +329,10 @@ class _CreatePostPageState extends ConsumerState<CreatePostPage> {
                     child: Text(
                       'メモ',
                       style: const TextStyle(
-                        fontSize: 20,fontWeight: FontWeight.bold,
-                      ),),
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ),
                   Padding(
                     padding: const EdgeInsets.all(16.0),
@@ -309,7 +340,8 @@ class _CreatePostPageState extends ConsumerState<CreatePostPage> {
                       autofocus: true,
                       maxLines: 5,
                       keyboardType: TextInputType.multiline,
-                      decoration: const InputDecoration(border: const OutlineInputBorder()),
+                      decoration: const InputDecoration(
+                          border: const OutlineInputBorder()),
                       onChanged: (text) {
                         memo = text;
                         setState(() {});
@@ -328,18 +360,23 @@ class _CreatePostPageState extends ConsumerState<CreatePostPage> {
                     child: Text(
                       '写真',
                       style: TextStyle(
-                        fontSize: 20,fontWeight: FontWeight.bold,
-                      ),),
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ),
                   Padding(
                     padding: const EdgeInsets.all(20.0),
                     child: GestureDetector(
                       onTap: () async {
-                        List<XFile>? xFiles = await _picker.pickMultiImage();//写真が複数選択できるようになる
-                        if(xFiles.isNotEmpty) {
-                          images = [];//２回目以降写真を追加した時、前回に追加した写真が消えるようになっている。
-                          for (var xFile in xFiles) {images.add(File(xFile.path));}
-                          setState(() {});//ontap以下写真が選択されている時の処理。
+                        List<XFile>? xFiles =
+                            await _picker.pickMultiImage(); //写真が複数選択できるようになる
+                        if (xFiles.isNotEmpty) {
+                          images = []; //２回目以降写真を追加した時、前回に追加した写真が消えるようになっている。
+                          for (var xFile in xFiles) {
+                            images.add(File(xFile.path));
+                          }
+                          setState(() {}); //ontap以下写真が選択されている時の処理。
                         }
                       },
                       child: Row(
@@ -367,7 +404,8 @@ class _CreatePostPageState extends ConsumerState<CreatePostPage> {
                     visible: images.isNotEmpty,
                     child: Container(
                       height: 200,
-                      child: ListView.builder( scrollDirection: Axis.horizontal,
+                      child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
                           itemCount: images.length,
                           itemBuilder: (context, index) {
                             return Stack(
@@ -375,49 +413,56 @@ class _CreatePostPageState extends ConsumerState<CreatePostPage> {
                                 GestureDetector(
                                   onTap: () {
                                     showGeneralDialog(
-                                      transitionDuration: const Duration(milliseconds: 1000),
+                                      transitionDuration:
+                                          const Duration(milliseconds: 1000),
                                       barrierDismissible: true,
                                       barrierLabel: '',
                                       context: context,
-                                      pageBuilder: (context, animation1, animation2) {
+                                      pageBuilder:
+                                          (context, animation1, animation2) {
                                         return DefaultTextStyle(
                                           style: Theme.of(context)
                                               .primaryTextTheme
                                               .bodyText1!,
                                           child: Center(
                                             child: Container(
-                                              child: SingleChildScrollView(
-                                                  child: InteractiveViewer(
-                                                    minScale: 0.1,
-                                                    maxScale: 5,
-                                                    child: Container(
-                                                      child: Image.file(images[index]),
-                                                      ),
-                                                    ),
-                                                  )
-                                            ),
-                                            ),
+                                                child: SingleChildScrollView(
+                                              child: InteractiveViewer(
+                                                minScale: 0.1,
+                                                maxScale: 5,
+                                                child: Container(
+                                                  child:
+                                                      Image.file(images[index]),
+                                                ),
+                                              ),
+                                            )),
+                                          ),
                                         );
                                       },
                                     );
                                   },
                                   child: Container(
-                                      height: 200,width: 200,
-                                      child: Image.file(images[index], fit: BoxFit.fill),
+                                    height: 200,
+                                    width: 200,
+                                    child: Image.file(images[index],
+                                        fit: BoxFit.fill),
                                   ),
                                 ),
-                                IconButton(onPressed: (){
-                                  images.removeAt(index);
-                                  setState(() {});//imagesがstatefulwidgetで管理されているため状態を保存するためにsetStateをつけなければならない
-                                  }, icon: Icon(
-                                  Icons.remove_circle,
-                                  size: 35,
-                                  color: Colors.red.withOpacity(0.7),
-                                ),),
+                                IconButton(
+                                  onPressed: () {
+                                    images.removeAt(index);
+                                    setState(
+                                        () {}); //imagesがstatefulwidgetで管理されているため状態を保存するためにsetStateをつけなければならない
+                                  },
+                                  icon: Icon(
+                                    Icons.remove_circle,
+                                    size: 35,
+                                    color: Colors.red.withOpacity(0.7),
+                                  ),
+                                ),
                               ],
                             );
-                          }
-                      ),
+                          }),
                     ),
                   ),
                   const Divider(
@@ -439,15 +484,17 @@ class _CreatePostPageState extends ConsumerState<CreatePostPage> {
                                     title: const Text('評価が未選択です。'),
                                     actions: <Widget>[
                                       GestureDetector(
-                                        child: const Text('戻る', style: const TextStyle(fontSize: 18),),
+                                        child: const Text(
+                                          '戻る',
+                                          style: const TextStyle(fontSize: 18),
+                                        ),
                                         onTap: () {
                                           Navigator.pop(context);
                                         },
                                       ),
                                     ],
                                   );
-                                }
-                            );
+                                });
                           } else if (_placeNameController.text == '') {
                             // バリデーションチェック
                             showDialog<void>(
@@ -457,15 +504,17 @@ class _CreatePostPageState extends ConsumerState<CreatePostPage> {
                                     title: const Text('施設名が未入力です。'),
                                     actions: <Widget>[
                                       GestureDetector(
-                                        child: const Text('戻る', style: const TextStyle(fontSize: 18),),
+                                        child: const Text(
+                                          '戻る',
+                                          style: const TextStyle(fontSize: 18),
+                                        ),
                                         onTap: () {
                                           Navigator.pop(context);
                                         },
                                       ),
                                     ],
                                   );
-                                }
-                            );
+                                });
                           } else {
                             //Todo:ローディング　お気に入り施設登録
                             showDialog(
@@ -474,7 +523,8 @@ class _CreatePostPageState extends ConsumerState<CreatePostPage> {
                               builder: (context) {
                                 return Center(
                                   // Default Indicator.
-                                  child: CircularProgressIndicator(color: Colors.red[900]),
+                                  child: CircularProgressIndicator(
+                                      color: Colors.red[900]),
                                 );
                               },
                             );
@@ -487,9 +537,8 @@ class _CreatePostPageState extends ConsumerState<CreatePostPage> {
                                   memo: memo,
                                   evaluationStatus: evaluationStatus!,
                                   imagePathList: imagePathList,
-                                  creatorId: ref
-                                      .watch(accountNotifierProvider)
-                                      .id,
+                                  creatorId:
+                                      ref.watch(accountNotifierProvider).id,
                                   creatorName: ref
                                       .watch(accountNotifierProvider)
                                       .userName,
@@ -501,14 +550,17 @@ class _CreatePostPageState extends ConsumerState<CreatePostPage> {
                                   updateDate: DateTime.now());
                               // お気に入りに追加にチェックがあったら、FireStoreのアカウントに施設名を反映させる
                               if (_flag) {
-                                await ref.read(accountNotifierProvider.notifier)
+                                await ref
+                                    .read(accountNotifierProvider.notifier)
                                     .update(
-                                    newFavoritePlace: _placeNameController
-                                        .text);
-                                await ref.read(accountNotifierProvider.notifier)
-                                    .canFetch(uid: ref
-                                    .watch(accountNotifierProvider)
-                                    .id);
+                                        newFavoritePlace:
+                                            _placeNameController.text);
+                                await ref
+                                    .read(accountNotifierProvider.notifier)
+                                    .canFetch(
+                                        uid: ref
+                                            .watch(accountNotifierProvider)
+                                            .id);
                               }
                               // 前の画面に戻る//??は前のものがnullだったら後の値を入れるという意味
                               Navigator.pop(context);
@@ -521,15 +573,16 @@ class _CreatePostPageState extends ConsumerState<CreatePostPage> {
                         style: OutlinedButton.styleFrom(
                           backgroundColor: Colors.red[900], //背景色
                         ),
-                        child: const Text('記録する',style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),)
-
-                    ),
+                        child: const Text(
+                          '記録する',
+                          style: TextStyle(
+                              color: Colors.white, fontWeight: FontWeight.bold),
+                        )),
                   ),
                 ],
               ),
+            ),
           ),
-      ),
-    )
-    );
+        ));
   }
 }
