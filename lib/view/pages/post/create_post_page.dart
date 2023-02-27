@@ -111,69 +111,61 @@ class _CreatePostPageState extends ConsumerState<CreatePostPage> {
                   Padding(
                     padding: const EdgeInsets.only(top: 10, right: 30, bottom: 10, left: 30),
                     child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.only(top: 10, right:  70, bottom: 10, left: 0),
-                          child: Column(
-                            children: [
-                              GestureDetector(
-                                onTap: () {
-                                  evaluationStatus = 0;
-                                  setState(() {});
-                                },
-                                child: Icon(
-                                  Icons.sentiment_very_satisfied,
-                                  color: evaluationStatus == 0 ? Colors.blue : Colors.grey,
-                                  size: 70,
-                                ),
+                        Column(
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                evaluationStatus = 0;
+                                setState(() {});
+                              },
+                              child: Icon(
+                                Icons.sentiment_very_satisfied,
+                                color: evaluationStatus == 0 ? Colors.blue : Colors.grey,
+                                size: 70,
                               ),
-                              const Text(
-                                  '良い'
-                              ),
-                            ],
-                          ),
+                            ),
+                            const Text(
+                                '良い'
+                            ),
+                          ],
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 10, right: 70, bottom: 10, left: 0),
-                          child: Column(
-                            children: [
-                              GestureDetector(
-                                onTap:() {
-                                  evaluationStatus = 1;
-                                  setState(() {});
-                                },
-                                child: Icon(
-                                  Icons.sentiment_neutral,
-                                  color: evaluationStatus == 1 ? Colors.yellow : Colors.grey,
-                                  size: 70,
-                                ),
+                        Column(
+                          children: [
+                            GestureDetector(
+                              onTap:() {
+                                evaluationStatus = 1;
+                                setState(() {});
+                              },
+                              child: Icon(
+                                Icons.sentiment_neutral,
+                                color: evaluationStatus == 1 ? Colors.yellow : Colors.grey,
+                                size: 70,
                               ),
-                              const Text(
-                                  '普通'
-                              ),
-                            ],
-                          ),
+                            ),
+                            const Text(
+                                '普通'
+                            ),
+                          ],
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 10, right: 0, bottom: 10, left: 0),
-                          child: Column(
-                            children: [
-                              GestureDetector(
-                                onTap:() {
-                                  evaluationStatus = 2;
-                                  setState(() {});
-                                },
-                                child: Icon(
-                                  Icons.sentiment_very_dissatisfied,
-                                  color: evaluationStatus == 2 ? Colors.red : Colors.grey,
-                                  size: 70,
-                                ),
+                        Column(
+                          children: [
+                            GestureDetector(
+                              onTap:() {
+                                evaluationStatus = 2;
+                                setState(() {});
+                              },
+                              child: Icon(
+                                Icons.sentiment_very_dissatisfied,
+                                color: evaluationStatus == 2 ? Colors.red : Colors.grey,
+                                size: 70,
                               ),
-                              const Text(
-                                  '悪い'
-                              ),
-                            ],
-                          ),
+                            ),
+                            const Text(
+                                '悪い'
+                            ),
+                          ],
                         ),
                       ],
                     ),
@@ -526,7 +518,11 @@ class _CreatePostPageState extends ConsumerState<CreatePostPage> {
                             }
                           }
                         },
-                        child: const Text('記録する')
+                        style: OutlinedButton.styleFrom(
+                          backgroundColor: Colors.red[900], //背景色
+                        ),
+                        child: const Text('記録する',style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),)
+
                     ),
                   ),
                 ],

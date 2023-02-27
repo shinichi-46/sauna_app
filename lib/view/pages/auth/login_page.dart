@@ -47,17 +47,6 @@ class LoginPage extends ConsumerWidget {
                     }
                     String _uid = userCredential.user!.uid;
                     //Todo: Widgetで使用する(riverpod)　ローディング　ログインの際にユーザーIDを処理する
-                    showDialog(
-                    barrierDismissible: false,
-                    context: context,
-                    builder: (context) {
-                    return Center(
-                    // Default Indicator.
-                    child: CircularProgressIndicator(color: Colors.red[900]),
-                    );
-                    },
-                    );
-                    try {
                     bool canFetched = await ref.read(accountNotifierProvider.notifier).canFetch(uid: _uid);
                     if (canFetched) {
                       Navigator.of(context).pushReplacement(
@@ -80,10 +69,6 @@ class LoginPage extends ConsumerWidget {
                   } on Exception catch (e) {
                     print('Other Exception');
                     print('${e.toString()}');
-                  }
-                  } finally {
-                    // Dismiss the indicator.
-                    Navigator.pop(context);
                   }
                 },
               ),
